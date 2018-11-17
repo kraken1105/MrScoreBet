@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>Mr.ScoreBet</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.css">
 	<link rel="stylesheet" href="style.css">
 
@@ -13,15 +13,16 @@
 <body>
 
 	<header class="header clearfix">
-		<a href="index.html" class="header__logo">Logo</a>
-		<a href="" class="header__icon-bar">
+		<a href="<%=request.getContextPath()%>/index.jsp" class="header__logo">
+			<img src="<%=request.getContextPath()%>/images/logo.png" style="width:40px; height:cover;"></img></a>
+		<a href="" class="header__icon-bar">			
 			<span></span>
 			<span></span>
 			<span></span>
 		</a>
 		<ul class="header__menu animate">
-			<li class="header__menu__item"><a href="index.html">Home</a></li>
-			<li class="header__menu__item"><a href="single.html">Single</a></li>
+			<li class="header__menu__item"><a href="<%=request.getContextPath()%>/user.jsp">Area Personale</a></li>
+			<li class="header__menu__item"><a href="single.html">Logout</a></li>
 			<li class="header__menu__item"><a href="page.html">Page</a></li>
 			<li class="header__menu__item"><a href="">Item</a></li>
 			<li class="header__menu__item"><a href="">Item</a></li>
@@ -35,7 +36,7 @@
 			<div class="cover__caption__copy">
 				<h1> Mr.ScoreBet</h1>
 				<h2> Bet for free, win for real!</h2>
-				<a href="https://www.facebook.com/v3.2/dialog/oauth?client_id={423100594892660}&redirect_uri={&#34http://www.google.it&#34}&state={}" class="button">Accedi con Facebook</a>
+				<a href="https://www.facebook.com/v3.2/dialog/oauth?client_id=423100594892660&redirect_uri=http://localhost:8080<%=request.getContextPath()%>/user.jsp&response_type=code&scope={pages_show_list}" class="button">Accedi con Facebook</a>
 			</div>
 		</div>
 	</section>
