@@ -25,8 +25,7 @@ public class Accedi extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Accedi() {
-    	
+    public Accedi() {    	
         super();
         // TODO Auto-generated constructor stub
     }
@@ -45,13 +44,17 @@ public class Accedi extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 1) L'utente ha già contattato Fb
+		// TO-DO: controllare se l'utente ha veramente fatto l'accesso, potrebbe averlo negato e quindi qui ho un errore
+		// vedere documentazione Facebook
 		String code = request.getParameter("code");
 	    String scope = request.getParameter("scope");
 	    
+	    // 2) Richiesta access_token a Fb fornendo il code
 	    URL oauth = new URL(" https://graph.facebook.com/v3.2/oauth/access_token?" + 
 	    		"client_id=2095469647430370" + 
-	    		"&redirect_uri=localhost:8080"+request.getContextPath()+"/user.jsp" + 
-	    		"&client_secret=d86e6c7a71084976e0d1747467dbd580" + 
+	    		"&redirect_uri=localhost:8080"+request.getContextPath()+"/app/user.jsp" + 
+	    		"&client_secret=d86e6c7a71084976e0d1747467dbd580" +
 	    		"&code="+code);
 	    		
         HttpURLConnection connection = (HttpURLConnection) oauth.openConnection();
@@ -61,7 +64,7 @@ public class Accedi extends HttpServlet {
                                 connection.getInputStream()));
         
         StringBuilder sb = new StringBuilder();
-        String line,token=null,tokentype,expires;
+        String line,token = null,tokentype,expires;
         while ((line = in.readLine()) != null) {
             sb.append(line);
         }
@@ -76,6 +79,8 @@ public class Accedi extends HttpServlet {
 			e.printStackTrace();
 		}
         
+        // 3) Ispezione dell'access_token
+        // TO-DO: se non è valido (scaduto o revocato, bisogna settare una variabile di sessione e reindirizzare l'utente a index.jsp)
         URL oinspect = new URL(" https://graph.facebook.com/debug_token?" + 
         		"input_token="+ token + 
         		"&access_token=62d1ca33988d65db393e1bda9f06c58b");
@@ -92,7 +97,7 @@ public class Accedi extends HttpServlet {
         }
         in.close();
         
-        String validity="false",userid="0000";
+        String validity="false", userid="0000";
         try {
 			JSONObject json = new JSONObject(sb2.toString());
 			validity = json.getString("is_valid");
@@ -102,10 +107,22 @@ public class Accedi extends HttpServlet {
 		}
         
         if(validity.equals("true")) {
-        HttpSession sessione = request.getSession();
-    	sessione.setAttribute("utente", userid );
-    	request.getRequestDispatcher( "/user.jsp" ).forward(request,response);
+        	HttpSession sessione = request.getSession();
+        	sessione.setAttribute("utente", userid );
+        	request.getRequestDispatcher( "/app/user.jsp" ).forward(request,response);
         }
+        
+        // 4) Estensione dell'access_token (cfr. prima risposta di https://stackoverflow.com/questions/27294165/how-should-a-facebook-user-access-token-be-consumed-on-the-server-side)
+        
+        
+        
+        // 5) Autenticazione locale dell'utente e salvataggio dell'access_token (nel DB)
+        
+        
+        
+        // 6) Reindirizzamento a app/user.jsp
+        
+        
     	
 	}
 
