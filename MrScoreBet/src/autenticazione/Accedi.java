@@ -45,7 +45,7 @@ public class Accedi extends HttpServlet {
 	    // 2) Richiesta access_token a Fb fornendo il code
 	    URL oauth = new URL(" https://graph.facebook.com/v3.2/oauth/access_token?" + 
 	    		"client_id=2095469647430370" + 
-	    		"&redirect_uri=http://localhost:8080"+request.getContextPath()+"/accedi"+ 
+	    		"&redirect_uri=https://localhost:8443"+request.getContextPath()+"/accedi"+ 
 	    		"&client_secret=d86e6c7a71084976e0d1747467dbd580" +
 	    		"&code="+code);
 	    		
@@ -62,7 +62,7 @@ public class Accedi extends HttpServlet {
         
         StringBuilder sb = new StringBuilder();
         String line,token = null,tokentype;
-        Double expires;
+        Integer expires;
         while ((line = in.readLine()) != null) {
             sb.append(line);
         }
@@ -74,7 +74,8 @@ public class Accedi extends HttpServlet {
 			System.out.println(token);
 	        tokentype = json.getString("token_type");
 	        System.out.println(tokentype);
-	        expires = json.getDouble("expires_in");
+	        expires = json.getInt("expires_in");
+	        System.out.println(expires);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

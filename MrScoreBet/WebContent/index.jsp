@@ -37,7 +37,7 @@
 			<div class="cover__caption__copy">
 				<h1> Mr.ScoreBet</h1>
 				<h2> Bet for free, win for real!</h2>
-				<a href="https://www.facebook.com/v3.2/dialog/oauth?client_id=2095469647430370&redirect_uri=http://localhost:8080<%=
+				<a href="https://www.facebook.com/v3.2/dialog/oauth?client_id=2095469647430370&redirect_uri=https://localhost:8443<%=
 				   request.getContextPath()%>/accedi&response_type=code&scope=pages_show_list" class="button">Accedi con Facebook</a>
 			</div>
 		</div>
