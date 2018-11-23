@@ -10,7 +10,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  	<script language="javascript">
+  	<script>
 	function Modulo() {
 		if (!(document.getElementById("match1_1").checked) && !(document.getElementById("match1_X").checked) && !(document.getElementById("match1_2").checked)) {
 			alert("Inserisci un pronostico per la prima partita!"); return false; }
@@ -79,7 +79,7 @@
 				        <div class="mrw-th mrw-width-50 mrw-center">Partita</div>
 				        <div class="mrw-th mrw-width-50 mrw-center">Pronostico</div>
 				    </div>
-				    <div class="mrw-tr"">
+				    <div class="mrw-tr">
 				        <div class="mrw-td mrw-width-50 mrw-center">Milan - Inter</div>
 				        <div class="mrw-td mrw-width-50 mrw-center">
 				        	<input type="radio" id="match1_1" name="match1" value="1"><label for="match1_1">1</label>

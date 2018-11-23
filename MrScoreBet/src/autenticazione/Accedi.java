@@ -17,6 +17,8 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import model.User;
+
 /**
  * Servlet implementation class Accedi
  */
@@ -42,6 +44,8 @@ public class Accedi extends HttpServlet {
 		// vedere documentazione Facebook
 		String code = request.getParameter("code");
 	    String scope = request.getParameter("scope");
+	    
+	    
 	    // 2) Richiesta access_token a Fb fornendo il code
 	    URL oauth = new URL(" https://graph.facebook.com/v3.2/oauth/access_token?" + 
 	    		"client_id=2095469647430370" + 
@@ -115,23 +119,24 @@ public class Accedi extends HttpServlet {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		
         
-        if(validity) {
-        	HttpSession sessione = request.getSession();
-        	sessione.setAttribute("utente", userid );
-        	request.getRequestDispatcher( "/app/user.jsp" ).forward(request,response);
-        }
         
         // 4) Estensione dell'access_token (cfr. prima risposta di https://stackoverflow.com/questions/27294165/how-should-a-facebook-user-access-token-be-consumed-on-the-server-side)
         
         
         
         // 5) Autenticazione locale dell'utente e salvataggio dell'access_token (nel DB)
-        
-        
+        User utente = new User(Integer.parseInt(userid), "Giggino", "Esposito", "admin", 0);        
         
         // 6) Reindirizzamento a app/user.jsp
-        
+        //if(validity) {
+        	HttpSession sessione = request.getSession();
+        	sessione.setAttribute("utente", utente);
+        	System.out.println("[DEBUG] Loggato "+utente.getNome()+" "+utente.getCognome()+" "+utente.getUserID());
+        	//request.getRequestDispatcher( "/app/user.jsp" ).forward(request,response);
+        	response.sendRedirect("/MrScoreBet/app/user.jsp"); // usando questo cambia anche il link nel browser dell'utente
+        //}
         
     	
 	}

@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+
+<%@ page import="model.User" %>
+<% User utente = (User) session.getAttribute("utente");%>
+
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -45,22 +49,22 @@
 				<img class="panel__card__image" src="https://source.unsplash.com/category/people/400x260" alt="Nature">
 				<div class="panel__card__copy">
 					<div class="panel__card__copy__text">
-						<p>Nome: <b>blabla</b></p>
-						<p>Cognome: <b>blabla</b></p>
-						<p>Facebook UserID: <b>0000</b></p>
+						<p>Nome: <b><%=""+utente.getNome().toString() %></b></p>
+						<p>Cognome: <b><%=""+utente.getCognome() %></b></p>
+						<p>Facebook UserID: <b><%=""+utente.getUserID() %></b></p>
 					</div>
 				</div>
 			</div>	
 
 			<h2 align="center">Schedine</h2>
-			<p>Punti totali: <b>0 pts</b></p>
+			<p>Punti totali: <b><%=""+utente.getPuntiTot() %> pts</b></p>
 			<!-- TO-DO: sistemare query string per indirizzamneto alla servlet -->
 			<p>Ultima schedina giocata: <a href="<%=request.getContextPath()%>/app/bet">1 giornata </a></p>
 			<p>Nuova schedina da giocare: <a href="<%=request.getContextPath()%>/app/bet">2 giornata </a><b>(2 h rimanenti)</b></p>
 		</div>
 
 		<!-- TO-DO: far comparire il pannello solo se è loggato un admin -->
-		<div class="panel__copy2">
+		<div class="panel__copy2" <% if(!utente.getRuolo().equals("admin")) out.print("style=\"display: none\"");%> > 
 			<h2 align="center">Area admin</h2>
 
 			<p>Inserisci i risultati della <a href="<%=request.getContextPath()%>/app/bet">1 giornata</a></p>
