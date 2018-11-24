@@ -9,16 +9,17 @@ public class User {
 	private Bet lastPlayedBet;
 	private Bet toPlayBet;
 	
-	public User(int userID, String nome, String cognome, String ruolo, int puntiTot) {
+	public User(int userID, String nome, String cognome, String ruolo, int puntiTot, Bet lastPlayedBet, Bet toPlayBet) {
 		super();
 		this.userID = userID;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.ruolo = ruolo;
 		this.puntiTot = puntiTot;
-		// TO-DO: settare anche ultima e nuova bolletta nel costruttore
+		this.lastPlayedBet = lastPlayedBet;
+		this.toPlayBet = toPlayBet;
 	}
-
+	
 	public int getPuntiTot() {return puntiTot;}
 	public void setPuntiTot(int puntiTot) {this.puntiTot = puntiTot;}
 	public int getUserID() {return userID;}

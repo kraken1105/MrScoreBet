@@ -127,7 +127,7 @@ public class Accedi extends HttpServlet {
         
         
         // 5) Autenticazione locale dell'utente e salvataggio dell'access_token (nel DB)
-        User utente = new User(Integer.parseInt(userid), "Giggino", "Esposito", "admin", 0);        
+        User utente = new User(Integer.parseInt(userid), "Giggino", "Esposito", "admin", 0);
         
         // 6) Reindirizzamento a app/user.jsp
         //if(validity) {
