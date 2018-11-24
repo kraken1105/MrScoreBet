@@ -1,7 +1,25 @@
 <!DOCTYPE html>
 
-<%@ page import="model.User" %>
-<% User utente = (User) session.getAttribute("utente");%>
+<%@page import="model.Bet"%>
+<%@page import="java.time.LocalDateTime"%>
+<%@page import="model.User" %>
+<%
+	User utente = (User) session.getAttribute("utente");
+	
+	Bet lastPlayedBet = utente.getLastPlayedBet();
+	Bet toPlayBet = utente.getToPlayBet();
+	
+	LocalDateTime data = null;
+	String lastGiornata = String.valueOf(lastPlayedBet.getNumGiornata());
+	String toPlayGiornata = new String("-");
+	
+	if (toPlayBet == null) {
+		data = null;
+	} else {
+		data = toPlayBet.getOrarioScadenza();
+		toPlayGiornata = String.valueOf(toPlayBet.getNumGiornata());
+	}
+%>
 
 <html lang="en">
 <head>
@@ -46,11 +64,12 @@
 			<h2 align="center">Dati personali</h2>
 
 			<div class="panel__card">
-				<img class="panel__card__image" src="https://source.unsplash.com/category/people/400x260" alt="Nature">
+				<img class="panel__card__image" src="<%=utente.getImage().getUrl() %>" 
+												width="<%=utente.getImage().getWidth()%>"
+												height ="<%=utente.getImage().getHeight()%>">
 				<div class="panel__card__copy">
 					<div class="panel__card__copy__text">
-						<p>Nome: <b><%=""+utente.getNome().toString() %></b></p>
-						<p>Cognome: <b><%=""+utente.getCognome() %></b></p>
+						<p>Nome: <b><%=""+utente.getNome() %></b></p>
 						<p>Facebook UserID: <b><%=""+utente.getUserID() %></b></p>
 					</div>
 				</div>
@@ -59,8 +78,8 @@
 			<h2 align="center">Schedine</h2>
 			<p>Punti totali: <b><%=""+utente.getPuntiTot() %> pts</b></p>
 			<!-- TO-DO: sistemare query string per indirizzamneto alla servlet -->
-			<p>Ultima schedina giocata: <a href="<%=request.getContextPath()%>/app/bet">1 giornata </a></p>
-			<p>Nuova schedina da giocare: <a href="<%=request.getContextPath()%>/app/bet">2 giornata </a><b>(2 h rimanenti)</b></p>
+			<p>Ultima schedina giocata: <a href="<%=request.getContextPath()%>/app/bet"><%=lastGiornata%> giornata </a></p>
+			<p>Nuova schedina da giocare: <a href="<%=request.getContextPath()%>/app/bet"><%=toPlayGiornata%> giornata </a><b id="mytimer"></b></p>
 		</div>
 
 		<!-- TO-DO: far comparire il pannello solo se Ã¨ loggato un admin -->
@@ -92,6 +111,48 @@
 			});
 	 });
 </script>
+
+<script>
+	function countDown(second,endMinute,endHour,endDay,endMonth,endYear) {
+		var now = new Date();
+		second = (arguments.length == 1) ? second + now.getSeconds() : second;
+		endYear =  typeof(endYear) != 'undefined' ?  endYear : now.getFullYear();            
+		endMonth = endMonth ? endMonth - 1 : now.getMonth();  //numero del mese cominciando da 0 esempio 03- marzo 
+		endDay = typeof(endDay) != 'undefined' ? endDay :  now.getDate();    
+		endHour = typeof(endHour) != 'undefined' ?  endHour : now.getHours();
+		endMinute = typeof(endMinute) != 'undefined' ? endMinute : now.getMinutes();  
+		//agiungiamo un secondo alla data finale (il nostro taimer mostrera tempo gia dopo 1 secondo.)
+		var endDate = new Date(endYear,endMonth,endDay,endHour,endMinute,second+1);
+		var interval = setInterval(function() { //faciamo partire taimer con intervallo di 1 secondo  
+		    var time = endDate.getTime() - now.getTime();
+		    if (time < 0) {                      //se la data finale impostata è meno di 1 secondo
+		    	document.getElementById('mytimer').innerHTML = '(giornata iniziata)';           
+		    } else {           
+		        var days = Math.floor(time / 864e5);
+		        var hours = Math.floor(time / 36e5) % 24;
+		        var minutes = Math.floor(time / 6e4) % 60;
+		        var seconds = Math.floor(time / 1e3) % 60; 
+		        var digit='<div style="width:70px;float:left;text-align:center">'+
+		        '<div style="font-family:Stencil;font-size:55px;">';// potete cambiare alteza e famiglia di font
+		        var text='</div><div>'
+		        var end='</div></div><div style="float:left;font-size:45px;">:</div>'
+		        
+		        if (!seconds && !minutes && !days && !hours) {             
+		        	document.getElementById('mytimer').innerHTML = '(giornata iniziata)';             
+		        } else {
+		        	document.getElementById('mytimer').innerHTML = '(' + days +'g '+ hours + 'h ' + minutes + 'm ' + seconds +'s rimanenti)';
+		        }         
+		    }
+		    now.setSeconds(now.getSeconds() + 1); //aumentiamo il tempo corrente per 1 secondo
+		}, 1000);
+	}
+	
+	<%if(data != null) out.print("countDown("+data.getSecond()+","+data.getMinute()+","+data.getHour()+","+
+		data.getDayOfMonth()+","+data.getMonthValue()+","+data.getYear()+");");
+	  else
+		  out.print("document.getElementById('mytimer').innerHTML = '(non disponibile)';");%>
+</script>
+
 
 
 </body>
