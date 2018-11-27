@@ -28,13 +28,13 @@ import com.sun.xacml.finder.impl.FilePolicyModule;
 /**
  * Servlet Filter implementation class AuthFilter
  */
-public class InterceptorFilter implements Filter {
+public class AuthenticationRequiredFilter implements Filter {
 	
 
     /**
      * Default constructor. 
      */
-    public InterceptorFilter() {
+    public AuthenticationRequiredFilter() {
         // TODO Auto-generated constructor stub
     }
 
@@ -55,7 +55,7 @@ public class InterceptorFilter implements Filter {
     
 		HttpSession session = req.getSession();
         if(session.getAttribute("utente")==null)
-        	res.sendRedirect(req.getContextPath()+"/login.jsp");
+        	res.sendRedirect(req.getContextPath()+"/index.jsp");
         else       	
         	chain.doFilter(request, response);
 	        

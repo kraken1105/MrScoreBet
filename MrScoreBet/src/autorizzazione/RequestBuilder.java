@@ -8,6 +8,8 @@ import com.sun.xacml.ctx.Attribute;
 import com.sun.xacml.ctx.RequestCtx;
 import com.sun.xacml.ctx.Subject;
 
+import model.User;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -44,20 +46,14 @@ public class RequestBuilder
         HashSet subjects = new HashSet();
           
         HttpSession session=request.getSession();
-        String ruolo=(String)session.getAttribute("ruolo");
-        
-        
+        User utente = (User) session.getAttribute("utente");
+        String ruolo = utente.getRuolo();
         
         if(ruolo==null){
             subjects=null;
         }
-        else{
-                      
-        attributes.add(new Attribute(new URI(SUBJECT_ROLE_IDENTIFIER),
-                                     null, null,
-                                     new StringAttribute(ruolo)));
-      
-                
+        else{   
+        attributes.add(new Attribute(new URI(SUBJECT_ROLE_IDENTIFIER),null, null,new StringAttribute(ruolo)));
         subjects.add(new Subject(attributes));
         }
 
@@ -77,12 +73,11 @@ public class RequestBuilder
         
         // the resource being requested : è una URI ma passata come stringa
         StringAttribute value =
-            new StringAttribute("http://localhost:8080"+request.getRequestURI());
+            new StringAttribute("https://localhost:8443"+request.getRequestURI());
        
         // create the resource using a standard, required identifier for
         // the resource being requested
-        resource.add(new Attribute(new URI(EvaluationCtx.RESOURCE_ID),
-                                   null, null, value));
+        resource.add(new Attribute(new URI(EvaluationCtx.RESOURCE_ID),null, null, value));
         
         return resource;
     }
@@ -103,8 +98,7 @@ public class RequestBuilder
             new URI(ACTION_IDENTIFIER);
 
         // create the action
-        action.add(new Attribute(actionId, null, null,
-                                 new StringAttribute("view")));
+        action.add(new Attribute(actionId, null, null, new StringAttribute("view")));
 
         return action;
     }
@@ -116,8 +110,6 @@ public class RequestBuilder
       
       return XACMLrequest;
     }
-    
-
 
 
 }

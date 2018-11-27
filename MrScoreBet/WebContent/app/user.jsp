@@ -86,8 +86,8 @@
 		<div class="panel__copy2" <% if(!utente.getRuolo().equals("admin")) out.print("style=\"display: none\"");%> > 
 			<h2 align="center">Area admin</h2>
 
-			<p>Inserisci i risultati della <a href="<%=request.getContextPath()%>/app/bet">1 giornata</a></p>
-			<p>Inserisci le partite della <a href="<%=request.getContextPath()%>/app/bet">2 giornata</a></p>
+			<p>Inserisci i risultati della <a href="<%=request.getContextPath()%>/admin/insertScore.jsp">1 giornata</a></p>
+			<p>Inserisci le partite della <a href="<%=request.getContextPath()%>/admin/insertBet.jsp">2 giornata</a></p>
 		</div>
 
 	</article>

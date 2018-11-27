@@ -28,13 +28,13 @@ import com.sun.xacml.finder.impl.FilePolicyModule;
 /**
  * Servlet Filter implementation class AuthFilter
  */
-public class AuthFilter implements Filter {
+public class AdminFilter implements Filter {
 	File[] listaFile;//contiene le policy disponibili
 
     /**
      * Default constructor. 
      */
-    public AuthFilter() {
+    public AdminFilter() {
         // TODO Auto-generated constructor stub
     }
 
@@ -84,7 +84,6 @@ public class AuthFilter implements Filter {
 	        try {
 	        RequestCtx XACMLrequest = RequestBuilder.createXACMLRequest(req);
 	  
-	
 	        PDP pdp = new PDP(new PDPConfig(attrFinder, policyFinder, null));
 	
 	        ResponseCtx XACMLresponse = pdp.evaluate(XACMLrequest);
@@ -101,17 +100,16 @@ public class AuthFilter implements Filter {
 	        if (dec == 0) {//permit
 	            chain.doFilter(request, response);
 	        } else if (dec == 1) {//deny
-	            res.sendRedirect(req.getContextPath()+"/AccessDenied.jsp");
+	            res.sendRedirect(req.getContextPath()+"/app/error.jsp");
 	        } else if (dec == 2||dec==3) {//not applicable o indeterminate
-	            res.sendRedirect(req.getContextPath()+"/errore.jsp"); 
+	            res.sendRedirect(req.getContextPath()+"/index.jsp"); 
 	        }            }
 	     catch (Exception ex) {
 	        ex.printStackTrace();
 	    }
         }
-        //se richiedo direttamente il path riservata/* il filtro restituisce la pagina di login
         else
-        	res.sendRedirect(req.getContextPath()+"/login.jsp");
+        	res.sendRedirect(req.getContextPath()+"/index.jsp");
 	}
 
 	/**
