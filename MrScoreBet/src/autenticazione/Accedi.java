@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 import model.Bet;
 import model.Image;
 import model.User;
+import utils.ServerDatabase;
 
 /**
  * Servlet implementation class Accedi
@@ -97,6 +99,10 @@ public class Accedi extends HttpServlet {
         
 		} catch(JSONException jex) {jex.printStackTrace();}
         
+		ArrayList<String> users = new ArrayList<String>();
+		users = ServerDatabase.selectAll(name);
+		if(users.size()==0) ServerDatabase.insert(name, 150, false);
+		
         if(validity) {
         	 LocalDateTime data = LocalDateTime.of(2017, Month.DECEMBER, 1, 15, 00);
              System.out.println(data.toString());
@@ -110,16 +116,7 @@ public class Accedi extends HttpServlet {
          	 sessione.setAttribute("utente", utente );
      		 response.sendRedirect("/MrScoreBet/app/user.jsp"); // usando questo cambia anche il link nel browser dell'utente
         	
-        }
-        
-        
-        // 5) Autenticazione locale dell'utente e salvataggio dell'access_token (nel DB)
-        
-        
-        
-        // 6) Reindirizzamento a app/user.jsp
-        
-        
+        }    
     	
 	}
 	
