@@ -1,39 +1,32 @@
-package utils;
+package dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
+import java.sql.*;
  
-/**
- *
- * @author sqlitetutorial.net
- */
-public class ServerDatabase {
+public class DBManager {
 	
-	private static Connection conn = null;
+	protected Connection connection;	
+	private static DBManager instance = null;
 	
-	private static void connect() {
-        try {
-            // db parameters
-            String url = "jdbc:sqlite:C:/policy/MrScoreBet.db";
-            // create a connection to the database
-            conn = DriverManager.getConnection(url);
-            
-            System.out.println("[DEBUG] Connessione to SQLite stabilita.");
-            
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } 
-    }
-	
-	private static void closeConnection() throws SQLException {
-		if(ServerDatabase.conn!=null) ServerDatabase.conn.close();
+	public static DBManager getInstance() {
+		if (instance == null) {
+			instance = new DBManager();
+		}
+		return instance;
 	}
 	
+	public Connection getConnection() throws SQLException {
+		String url = "jdbc:sqlite:C:/policy/MrScoreBet.db";        
+		connection = DriverManager.getConnection(url);		
+		return connection;
+	}
+	
+	public void closeConnection() throws SQLException {
+		if (connection != null && !connection.isClosed()) {
+			connection.close();
+		}
+	}
+	
+	/*/**********************************************************************************
 	public static void insert(String name, int score, boolean alreadyplayed) {
         String sql = "INSERT INTO UTENTI(name,score,alreadyplayed) "
         		+ "VALUES(?,?,?)";
@@ -69,6 +62,8 @@ public class ServerDatabase {
         } catch (SQLException e) {System.out.println(e.getMessage());}
         
         return results;
-    }
+    }	
+	************************************************************************************/
+	
 }
     

@@ -1,29 +1,18 @@
 package autenticazione;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.ArrayList;
+import java.io.*;
+import java.net.*;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.*;
 
-import model.Bet;
-import model.Image;
-import model.User;
-import utils.ServerDatabase;
+import dao.*;
+import model.*;
 
 /**
  * Servlet implementation class Accedi
@@ -42,15 +31,17 @@ public class Accedi extends HttpServlet {
 	
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String code = request.getParameter("code");
-		String userid=null, name = null, picture=null;
+		String userid=null, nome_cognome = null, picture=null;
 		int width=0, height=0;
 		Boolean validity = false;
+		Image img = null;
 		
+		// (2) Confirma dell'identità
 		try {
 	    URL oauth = new URL(" https://graph.facebook.com/v3.2/oauth/access_token?" + 
 	    		"client_id=2095469647430370" + 
@@ -58,8 +49,10 @@ public class Accedi extends HttpServlet {
 	    		"&client_secret=d86e6c7a71084976e0d1747467dbd580" +
 	    		"&code="+code);
 	    JSONObject json = useFBAPIs(oauth);
-	    String token = json.getString("access_token"); //INUTILE PER ORA LEGGGERE EXPIRES_IN E TOKEN_TYPE
+	    String token = json.getString("access_token"); //INUTILE PER ORA LEGGERE EXPIRES_IN E TOKEN_TYPE
         
+	    
+	    // Prelievo app token
         URL mytoken = new URL("https://graph.facebook.com/v3.2/oauth/access_token?"+
         		"client_id=2095469647430370" + 
 	    		"&redirect_uri=https://localhost:8443"+request.getContextPath()+"/accedi"+ 
@@ -69,6 +62,8 @@ public class Accedi extends HttpServlet {
         JSONObject json2 = useFBAPIs(mytoken);
         String apptoken = json2.getString("access_token");
        
+        
+        // (3) Inspezione dell'access token
         URL oinspect = new URL("https://graph.facebook.com/debug_token?" + 
         		"input_token="+ token + 
         		"&access_token="+apptoken);
@@ -77,7 +72,8 @@ public class Accedi extends HttpServlet {
         validity = json3.getJSONObject("data").getBoolean("is_valid");
 		userid = json3.getJSONObject("data").getString("user_id");
 		
-
+		
+		// (4) Estensione dell'access token
         URL extend = new URL("https://graph.facebook.com/v3.2/oauth/access_token?"+
         			 "grant_type=fb_exchange_token" + 
         			 "&client_id=2095469647430370" + 
@@ -87,38 +83,53 @@ public class Accedi extends HttpServlet {
         JSONObject json4 = useFBAPIs(extend);
         String longtermtoken = json4.getString("access_token");
         
+        
+        // Prelievo delle informazioni personali
         URL userinfos = new URL("https://graph.facebook.com/me?fields=" +
         		"name,picture"+ //tanti altri disponibili: RUOLO CI SERVE
         		"&access_token=" + longtermtoken);
         
         JSONObject json5 = useFBAPIs(userinfos);
-        name = json5.getString("name");
+        nome_cognome = json5.getString("name");
         picture = json5.getJSONObject("picture").getJSONObject("data").getString("url");
-        width = json5.getJSONObject("picture").getJSONObject("data").getInt("width");;
-        height = json5.getJSONObject("picture").getJSONObject("data").getInt("height");;
+        width = json5.getJSONObject("picture").getJSONObject("data").getInt("width");
+        height = json5.getJSONObject("picture").getJSONObject("data").getInt("height");
+        
+        img = new Image(picture,width,height);
         
 		} catch(JSONException jex) {jex.printStackTrace();}
         
-		ArrayList<String> users = new ArrayList<String>();
-		users = ServerDatabase.selectAll(name);
-		if(users.size()==0) ServerDatabase.insert(name, 150, false);
 		
+		// (5) Login dell'utente localmente al server
+		User utente = null;
+		try {
+			
+			try {
+				utente = UserDAO.read(userid);	// utente già presente nel db
+			} catch(UserNotFoundException|SQLException e) {
+				///////////// [TO-DO] bisogna leggere il ruolo veramente
+				utente = new User(userid, nome_cognome, "admin", 0, null, SchedinaDAO.getToPlayBet(), img); // creazione nuovo utente
+			}		
+		
+		} catch (SQLException e) {e.printStackTrace();}
+		
+		
+		// (6) Reindirizzamento
         if(validity) {
-        	 LocalDateTime data = LocalDateTime.of(2017, Month.DECEMBER, 1, 15, 00);
-             System.out.println(data.toString());
-             
-             Image img = new Image(picture,width,height);
-             Bet lastPlayedBet = new Bet(1, null, null, 0);
-             Bet toPlayBet = new Bet(2, null, data, 0);
-             
-             User utente = new User(userid, name, "admin", img, 0, lastPlayedBet, toPlayBet); 
-             HttpSession sessione = request.getSession();
+        	 HttpSession sessione = request.getSession();
          	 sessione.setAttribute("utente", utente );
-     		 response.sendRedirect("/MrScoreBet/app/user.jsp"); // usando questo cambia anche il link nel browser dell'utente
+     		 response.sendRedirect("/MrScoreBet/app/user.jsp");
         	
-        }    
+        } else {
+        	
+        	// [TO-DO] Dobbiamo gestire eventuali token scaduti reindirizzando a una pagina di errore/login
+        	
+        }
     	
 	}
+	
+	
+	
 	
 	public JSONObject useFBAPIs(URL url) throws IOException {
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();

@@ -12,7 +12,8 @@ public class Image {
 		this.height = height;
 	}
 	
-	public String getUrl(){ return url;}
-	public int getWidth() { return width;}
-	public int getHeight() { return height;}
+	public String getUrl(){return url;}
+	public int getWidth() {return width;}
+	public int getHeight(){return height;}
+	
 }
