@@ -14,25 +14,15 @@ import org.json.*;
 import dao.*;
 import model.*;
 
-/**
- * Servlet implementation class Accedi
- */
 @WebServlet(urlPatterns={"/accedi"})
 public class Accedi extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public Accedi() {    	
         super();
-        // TODO Auto-generated constructor stub
     }
 	
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String code = request.getParameter("code");
@@ -41,7 +31,7 @@ public class Accedi extends HttpServlet {
 		Boolean validity = false;
 		Image img = null;
 		
-		// (2) Confirma dell'identità
+		// (2) Conferma dell'identità
 		try {
 	    URL oauth = new URL(" https://graph.facebook.com/v3.2/oauth/access_token?" + 
 	    		"client_id=2095469647430370" + 
@@ -63,7 +53,7 @@ public class Accedi extends HttpServlet {
         String apptoken = json2.getString("access_token");
        
         
-        // (3) Inspezione dell'access token
+        // (3) Ispezione dell'access token
         URL oinspect = new URL("https://graph.facebook.com/debug_token?" + 
         		"input_token="+ token + 
         		"&access_token="+apptoken);
@@ -119,7 +109,8 @@ public class Accedi extends HttpServlet {
 		// (6) Reindirizzamento
         if(validity) {
         	 HttpSession sessione = request.getSession();
-         	 sessione.setAttribute("utente", utente );
+         	 sessione.setAttribute("utente", utente );         	 
+         	 sessione.setAttribute("errore", "null");	// reset dell'errore
      		 response.sendRedirect("/MrScoreBet/app/user.jsp");
         	
         } else {

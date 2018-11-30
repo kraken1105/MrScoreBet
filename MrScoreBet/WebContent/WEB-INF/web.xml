@@ -9,7 +9,6 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>risorse-protette</web-resource-name>
@@ -24,7 +23,6 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  
   <filter>
     <display-name>AdminFilter</display-name>
     <filter-name>AdminFilter</filter-name>
@@ -34,7 +32,6 @@
     <filter-name>AdminFilter</filter-name>
     <url-pattern>/admin/*</url-pattern>
   </filter-mapping>
-  
   <filter>
     <display-name>AuthenticationRequiredFilter</display-name>
     <filter-name>AuthenticationRequiredFilter</filter-name>
@@ -44,5 +41,4 @@
     <filter-name>AuthenticationRequiredFilter</filter-name>
     <url-pattern>/app/*</url-pattern>
   </filter-mapping>
-  
 </web-app>

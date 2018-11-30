@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+
+<%
+	String errore = (String) session.getAttribute("errore");
+	if(errore!=null && !errore.equals("null")) {
+		out.print("<script> alert(\""+errore+"\"); </script> ");
+		session.setAttribute("errore","null");	// reset dell'errore
+	}
+	
+	boolean logged_in = false;
+	if(session.getAttribute("utente")!=null) logged_in=true;
+%>
+
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -26,7 +38,7 @@
 		</a>
 		<ul class="header__menu animate">
 			<li class="header__menu__item"><a href="<%=request.getContextPath()%>/app/user.jsp">Area Personale</a></li>
-			<li class="header__menu__item"><a href="boh.jsp">Logout</a></li>
+			<li class="header__menu__item" <% if(!logged_in) out.print("style=\"display: none\"");%>><a href="<%=request.getContextPath()%>/Logout">Logout</a></li>
 		</ul>
 	</header>
 

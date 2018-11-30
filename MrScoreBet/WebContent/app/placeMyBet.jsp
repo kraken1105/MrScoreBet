@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+
+<%@page import="model.*"%>
+<%
+	User utente = (User) session.getAttribute("utente");	
+	Bet toPlayBet = utente.getToPlayBet();
+%>
+
 <html lang="en">
 
 <head>
@@ -13,25 +20,25 @@
   	<script>
 	function Modulo() {
 		if (!(document.getElementById("match1_1").checked) && !(document.getElementById("match1_X").checked) && !(document.getElementById("match1_2").checked)) {
-			alert("Inserisci un pronostico per la prima partita!"); return false; }
+			alert("Inserisci un pronostico per <%=toPlayBet.getGameList().get(0).getSquadre()%>!"); return false; }
 		else if (!(document.getElementById("match2_1").checked) && !(document.getElementById("match2_X").checked) && !(document.getElementById("match2_2").checked)) {
-			alert("Inserisci un pronostico per la seconda partita!"); return false; }
+			alert("Inserisci un pronostico per <%=toPlayBet.getGameList().get(1).getSquadre()%>!"); return false; }
 		else if (!(document.getElementById("match3_1").checked) && !(document.getElementById("match3_X").checked) && !(document.getElementById("match3_2").checked)) {
-			alert("Inserisci un pronostico per la terza partita!"); return false; }
+			alert("Inserisci un pronostico per <%=toPlayBet.getGameList().get(2).getSquadre()%>!"); return false; }
 		else if (!(document.getElementById("match4_1").checked) && !(document.getElementById("match4_X").checked) && !(document.getElementById("match4_2").checked)) {
-			alert("Inserisci un pronostico per la quarta partita!"); return false; }
+			alert("Inserisci un pronostico per <%=toPlayBet.getGameList().get(3).getSquadre()%>!"); return false; }
 		else if (!(document.getElementById("match5_1").checked) && !(document.getElementById("match5_X").checked) && !(document.getElementById("match5_2").checked)) {
-			alert("Inserisci un pronostico per la quinta partita!"); return false; }
+			alert("Inserisci un pronostico per <%=toPlayBet.getGameList().get(4).getSquadre()%>!"); return false; }
 		else if (!(document.getElementById("match6_1").checked) && !(document.getElementById("match6_X").checked) && !(document.getElementById("match6_2").checked)) {
-			alert("Inserisci un pronostico per la sesta partita!"); return false; }
+			alert("Inserisci un pronostico per <%=toPlayBet.getGameList().get(5).getSquadre()%>!"); return false; }
 		else if (!(document.getElementById("match7_1").checked) && !(document.getElementById("match7_X").checked) && !(document.getElementById("match7_2").checked)) {
-			alert("Inserisci un pronostico per la settima partita!"); return false; }
+			alert("Inserisci un pronostico per <%=toPlayBet.getGameList().get(6).getSquadre()%>!"); return false; }
 		else if (!(document.getElementById("match8_1").checked) && !(document.getElementById("match8_X").checked) && !(document.getElementById("match8_2").checked)) {
-			alert("Inserisci un pronostico per l'ottava partita!"); return false; }
+			alert("Inserisci un pronostico per <%=toPlayBet.getGameList().get(7).getSquadre()%>!"); return false; }
 		else if (!(document.getElementById("match9_1").checked) && !(document.getElementById("match9_X").checked) && !(document.getElementById("match9_2").checked)) {
-			alert("Inserisci un pronostico per la nona partita!"); return false; }
+			alert("Inserisci un pronostico per <%=toPlayBet.getGameList().get(8).getSquadre()%>!"); return false; }
 		else if (!(document.getElementById("match10_1").checked) && !(document.getElementById("match10_X").checked) && !(document.getElementById("match10_2").checked)) {
-			alert("Inserisci un pronostico per la decima partita!"); return false; }
+			alert("Inserisci un pronostico per <%=toPlayBet.getGameList().get(9).getSquadre()%>!"); return false; }
 		//INVIA IL MODULO
 		else {
 			document.getElementById("form1").action = "<%=request.getContextPath()%>/app/bet";
@@ -54,7 +61,7 @@
 		</a>
 		<ul class="header__menu animate">
 			<li class="header__menu__item"><a href="<%=request.getContextPath()%>/app/user.jsp">Area Personale</a></li>
-			<li class="header__menu__item"><a href="boh.jsp">Logout</a></li>
+			<li class="header__menu__item"><a href="<%=request.getContextPath()%>/Logout">Logout</a></li>
 		</ul>
 	</header>
 
@@ -70,7 +77,7 @@
 
 	<article class="panel">
 		<div class="panel__copy">
-			<h2 align="center">Serie A giornata 2</h2>
+			<h2 align="center">Serie A giornata <%=toPlayBet.getNumGiornata()%></h2>
 
 			<form class="boxed" id="form1" method="post">
 				
@@ -80,7 +87,7 @@
 				        <div class="mrw-th mrw-width-50 mrw-center">Pronostico</div>
 				    </div>
 				    <div class="mrw-tr">
-				        <div class="mrw-td mrw-width-50 mrw-center">Milan - Inter</div>
+				        <div class="mrw-td mrw-width-50 mrw-center"><%=toPlayBet.getGameList().get(0).getSquadre()%></div>
 				        <div class="mrw-td mrw-width-50 mrw-center">
 				        	<input type="radio" id="match1_1" name="match1" value="1"><label for="match1_1">1</label>
 							<input type="radio" id="match1_X" name="match1" value="X"><label for="match1_X">X</label>
@@ -88,7 +95,7 @@
 				        </div>
 				    </div>
 				    <div class="mrw-tr">
-				        <div class="mrw-td mrw-width-50 mrw-center">Milan - Inter</div>
+				        <div class="mrw-td mrw-width-50 mrw-center"><%=toPlayBet.getGameList().get(1).getSquadre()%></div>
 				        <div class="mrw-td mrw-width-50 mrw-center">
 				        	<input type="radio" id="match2_1" name="match2" value="1"><label for="match2_1">1</label>
 							<input type="radio" id="match2_X" name="match2" value="X"><label for="match2_X">X</label>
@@ -96,7 +103,7 @@
 				        </div>
 				    </div>
 				    <div class="mrw-tr">
-				        <div class="mrw-td mrw-width-50 mrw-center">Milan - Inter</div>
+				        <div class="mrw-td mrw-width-50 mrw-center"><%=toPlayBet.getGameList().get(2).getSquadre()%></div>
 				        <div class="mrw-td mrw-width-50 mrw-center">
 				        	<input type="radio" id="match3_1" name="match3" value="1"><label for="match3_1">1</label>
 							<input type="radio" id="match3_X" name="match3" value="X"><label for="match3_X">X</label>
@@ -104,7 +111,7 @@
 				        </div>
 				    </div>
 				    <div class="mrw-tr">
-				        <div class="mrw-td mrw-width-50 mrw-center">Milan - Inter</div>
+				        <div class="mrw-td mrw-width-50 mrw-center"><%=toPlayBet.getGameList().get(3).getSquadre()%></div>
 				        <div class="mrw-td mrw-width-50 mrw-center">
 				        	<input type="radio" id="match4_1" name="match4" value="1"><label for="match4_1">1</label>
 							<input type="radio" id="match4_X" name="match4" value="X"><label for="match4_X">X</label>
@@ -112,7 +119,7 @@
 				        </div>
 				    </div>
 				    <div class="mrw-tr">
-				        <div class="mrw-td mrw-width-50 mrw-center">Milan - Inter</div>
+				        <div class="mrw-td mrw-width-50 mrw-center"><%=toPlayBet.getGameList().get(4).getSquadre()%></div>
 				        <div class="mrw-td mrw-width-50 mrw-center">
 				        	<input type="radio" id="match5_1" name="match5" value="1"><label for="match5_1">1</label>
 							<input type="radio" id="match5_X" name="match5" value="X"><label for="match5_X">X</label>
@@ -120,7 +127,7 @@
 				        </div>
 				    </div>
 				    <div class="mrw-tr">
-				        <div class="mrw-td mrw-width-50 mrw-center">Milan - Inter</div>
+				        <div class="mrw-td mrw-width-50 mrw-center"><%=toPlayBet.getGameList().get(5).getSquadre()%></div>
 				        <div class="mrw-td mrw-width-50 mrw-center">
 				        	<input type="radio" id="match6_1" name="match6" value="1"><label for="match6_1">1</label>
 							<input type="radio" id="match6_X" name="match6" value="X"><label for="match6_X">X</label>
@@ -128,7 +135,7 @@
 				        </div>
 				    </div>
 				    <div class="mrw-tr">
-				        <div class="mrw-td mrw-width-50 mrw-center">Milan - Inter</div>
+				        <div class="mrw-td mrw-width-50 mrw-center"><%=toPlayBet.getGameList().get(6).getSquadre()%></div>
 				        <div class="mrw-td mrw-width-50 mrw-center">
 				        	<input type="radio" id="match7_1" name="match7" value="1"><label for="match7_1">1</label>
 							<input type="radio" id="match7_X" name="match7" value="X"><label for="match7_X">X</label>
@@ -136,7 +143,7 @@
 				        </div>
 				    </div>
 				    <div class="mrw-tr">
-				        <div class="mrw-td mrw-width-50 mrw-center">Milan - Inter</div>
+				        <div class="mrw-td mrw-width-50 mrw-center"><%=toPlayBet.getGameList().get(7).getSquadre()%></div>
 				        <div class="mrw-td mrw-width-50 mrw-center">
 				        	<input type="radio" id="match8_1" name="match8" value="1"><label for="match8_1">1</label>
 							<input type="radio" id="match8_X" name="match8" value="X"><label for="match8_X">X</label>
@@ -144,7 +151,7 @@
 				        </div>
 				    </div>
 				    <div class="mrw-tr">
-				        <div class="mrw-td mrw-width-50 mrw-center">Milan - Inter</div>
+				        <div class="mrw-td mrw-width-50 mrw-center"><%=toPlayBet.getGameList().get(8).getSquadre()%></div>
 				        <div class="mrw-td mrw-width-50 mrw-center">
 				        	<input type="radio" id="match9_1" name="match9" value="1"><label for="match9_1">1</label>
 							<input type="radio" id="match9_X" name="match9" value="X"><label for="match9_X">X</label>
@@ -152,7 +159,7 @@
 				        </div>
 				    </div>
 				    <div class="mrw-tr">
-				        <div class="mrw-td mrw-width-50 mrw-center">Milan - Inter</div>
+				        <div class="mrw-td mrw-width-50 mrw-center"><%=toPlayBet.getGameList().get(9).getSquadre()%></div>
 				        <div class="mrw-td mrw-width-50 mrw-center">
 				        	<input type="radio" id="match10_1" name="match10" value="1"><label for="match10_1">1</label>
 							<input type="radio" id="match10_X" name="match10" value="X"><label for="match10_X">X</label>

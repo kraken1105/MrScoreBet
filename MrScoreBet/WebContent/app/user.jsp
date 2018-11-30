@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 
-<%@page import="model.Bet"%>
+<%@page import="model.*"%>
 <%@page import="java.time.LocalDateTime"%>
-<%@page import="model.User" %>
 <%
 	User utente = (User) session.getAttribute("utente");
 	
@@ -22,6 +21,12 @@
 		toPlayGiornata = String.valueOf(toPlayBet.getNumGiornata());		
 	} else {
 		data = null;
+	}
+	
+	String errore = (String) session.getAttribute("errore");
+	if(!errore.equals("null")) {
+		out.print("<script> alert(\""+errore+"\"); </script> ");
+		session.setAttribute("errore","null");	// reset dell'errore
 	}
 %>
 
@@ -49,7 +54,7 @@
 		</a>
 		<ul class="header__menu animate">
 			<li class="header__menu__item"><a href="<%=request.getContextPath()%>/app/user.jsp">Area Personale</a></li>
-			<li class="header__menu__item"><a href="boh.jsp">Logout</a></li>
+			<li class="header__menu__item"><a href="<%=request.getContextPath()%>/Logout">Logout</a></li>
 		</ul>
 	</header>
 
@@ -73,8 +78,8 @@
 												height ="<%=utente.getImage().getHeight()%>">
 				<div class="panel__card__copy">
 					<div class="panel__card__copy__text">
-						<p>Nome: <b><%=""+utente.getNome_cognome() %></b></p>
-						<p>Facebook UserID: <b><%=""+utente.getUserID() %></b></p>
+						<p>Nome e Cognome: <br></br><b><%=""+utente.getNome_cognome() %></b></p>
+						<p>Facebook UserID: <br></br><b><%=""+utente.getUserID() %></b></p>
 					</div>
 				</div>
 			</div>	
@@ -82,8 +87,8 @@
 			<h2 align="center">Schedine</h2>
 			<p>Punti totali: <b><%=""+utente.getPuntiTot() %> pts</b></p>
 			<!-- TO-DO: sistemare query string per indirizzamneto alla servlet -->
-			<p>Ultima schedina giocata: <a href="<%=request.getContextPath()%>/app/bet"><%=lastPlayedGiornata%> giornata </a></p>
-			<p>Nuova schedina da giocare: <a href="<%=request.getContextPath()%>/app/bet"><%=toPlayGiornata%> giornata </a><b id="mytimer"></b></p>
+			<p>Ultima schedina giocata: <a href="<%=request.getContextPath()%>/app/bet?to=myLastBet"><%=lastPlayedGiornata%> giornata </a></p>
+			<p>Nuova schedina da giocare: <a href="<%=request.getContextPath()%>/app/bet?to=placeMyBet"><%=toPlayGiornata%> giornata </a><b id="mytimer"></b></p>
 		</div>
 
 		<!-- TO-DO: far comparire il pannello solo se è loggato un admin -->
