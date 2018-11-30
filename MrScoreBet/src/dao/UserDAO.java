@@ -18,7 +18,7 @@ public class UserDAO {
 			s.setString(3, u.getRuolo());
 			s.setInt(4, 0);
 			s.setNull(5, java.sql.Types.INTEGER);	// lastPlayedBet è null			
-			if (u.getToPlayBet()==null) s.setNull(5, java.sql.Types.INTEGER);	// non esiste alcuna toPlayBet nel db
+			if (u.getToPlayBet()==null) s.setNull(6, java.sql.Types.INTEGER);	// non esiste alcuna toPlayBet nel db
 			else s.setInt(6, u.getToPlayBet().getID());
 			
 			s.executeUpdate();
@@ -74,7 +74,10 @@ public class UserDAO {
 			s.setString(1, u.getRuolo());
 			s.setInt(2, u.getPuntiTot());
 			s.setInt(3, u.getLastPlayedBet().getID());
-			s.setInt(4, u.getToPlayBet().getID());
+			
+			if(u.getToPlayBet() == null) s.setNull(4, java.sql.Types.INTEGER);
+			else s.setInt(4, u.getToPlayBet().getID());
+			
 			s.setString(5, u.getUserID());
 			
 			s.executeUpdate();
@@ -108,8 +111,9 @@ public class UserDAO {
 		PreparedStatement s = null;
 		
 		try { 
-			s = conn.prepareStatement("SELECT * FROM UTENTI WHERE toPlayBet=?");
+			s = conn.prepareStatement("SELECT * FROM UTENTI WHERE toPlayBet=? OR toPlayBet=?");
 			s.setNull(1, java.sql.Types.INTEGER);
+			s.setInt(2, b.getNumGiornata()-1);
 			ResultSet rs = s.executeQuery();
 				
 			while (rs.next()) {

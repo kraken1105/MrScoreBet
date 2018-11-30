@@ -106,9 +106,11 @@ public class Accedi extends HttpServlet {
 			
 			try {
 				utente = UserDAO.read(userid);	// utente già presente nel db
+				utente.setImage(img);
 			} catch(UserNotFoundException|SQLException e) {
 				///////////// [TO-DO] bisogna leggere il ruolo veramente
-				utente = new User(userid, nome_cognome, "admin", 0, null, SchedinaDAO.getToPlayBet(), img); // creazione nuovo utente
+				utente = new User(userid, nome_cognome, "admin", 0, null, SchedinaDAO.getToPlayBet(), img);
+				UserDAO.create(utente); // creazione nuovo utente
 			}		
 		
 		} catch (SQLException e) {e.printStackTrace();}

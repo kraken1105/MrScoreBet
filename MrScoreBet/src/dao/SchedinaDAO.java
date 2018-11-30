@@ -17,7 +17,11 @@ public class SchedinaDAO {
 		int generated_ID = -1;
 		
 		try {
-			s = conn.prepareStatement("INSERT INTO SCHEDINE VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			s = conn.prepareStatement("INSERT INTO SCHEDINE (numGiornata,orarioScadenza,presenza_esiti," + 
+					"match1,match2,match3,match4,match5,match6,match7,match8,match9,match10," + 
+					"esito_match1,esito_match2,esito_match3,esito_match4,esito_match5,esito_match6," + 
+					"esito_match7,esito_match8,esito_match9,esito_match10) "
+					+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 			s.setInt(1, b.getNumGiornata());
 			s.setString(2, b.getOrarioScadenza().toString());
 			s.setBoolean(3, false);
@@ -31,7 +35,8 @@ public class SchedinaDAO {
 			s.executeUpdate();
 			
 			// Imposta b come toPlayBet per tutti gli utenti che hanno il toPlayBet a null
-			// (ossia che si sono appena registrati o avevano già giocato l'ultima schedina disponibile)
+			// (ossia che si sono appena registrati o avevano già giocato l'ultima schedina disponibile),
+			// e per tutti gli utenti che non hanno giocato l'ultima schedina (oramai è tardi)
 			UserDAO.setToPlayBet(b);
 			
 			ResultSet rs = s.getGeneratedKeys();
@@ -100,10 +105,12 @@ public class SchedinaDAO {
 			for(int i=1; i<11; i++)
 				s.setString(i, b.getGameList().get(i-1).getRisultato());
 			
+			s.setInt(11, b.getID());
+			
 			s.executeUpdate();
 			
 			// Calcola i punteggi di tutti i pronostici associati alla schedina b.
-			// Di conseguenza, vengono aggiornati anche i punteffi tottali degli utenti.
+			// Di conseguenza, vengono aggiornati anche i punteggi totali degli utenti.
 			PronosticoDAO.calcolaPunti(b);
 						
 		} catch (SQLException e) {

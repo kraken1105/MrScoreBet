@@ -7,17 +7,21 @@
 	User utente = (User) session.getAttribute("utente");
 	
 	Bet lastPlayedBet = utente.getLastPlayedBet();
+	String lastPlayedGiornata = new String("-");
 	Bet toPlayBet = utente.getToPlayBet();
-	
-	LocalDateTime data = null;
-	String lastGiornata = String.valueOf(lastPlayedBet.getNumGiornata());
 	String toPlayGiornata = new String("-");
 	
-	if (toPlayBet == null) {
-		data = null;
-	} else {
+	LocalDateTime data = null;
+	
+	if (lastPlayedBet != null) {
+		lastPlayedGiornata = String.valueOf(lastPlayedBet.getNumGiornata());		
+	}
+	
+	if (toPlayBet != null) {
 		data = toPlayBet.getOrarioScadenza();
-		toPlayGiornata = String.valueOf(toPlayBet.getNumGiornata());
+		toPlayGiornata = String.valueOf(toPlayBet.getNumGiornata());		
+	} else {
+		data = null;
 	}
 %>
 
@@ -69,7 +73,7 @@
 												height ="<%=utente.getImage().getHeight()%>">
 				<div class="panel__card__copy">
 					<div class="panel__card__copy__text">
-						<p>Nome: <b><%=""+utente.getNome() %></b></p>
+						<p>Nome: <b><%=""+utente.getNome_cognome() %></b></p>
 						<p>Facebook UserID: <b><%=""+utente.getUserID() %></b></p>
 					</div>
 				</div>
@@ -78,7 +82,7 @@
 			<h2 align="center">Schedine</h2>
 			<p>Punti totali: <b><%=""+utente.getPuntiTot() %> pts</b></p>
 			<!-- TO-DO: sistemare query string per indirizzamneto alla servlet -->
-			<p>Ultima schedina giocata: <a href="<%=request.getContextPath()%>/app/bet"><%=lastGiornata%> giornata </a></p>
+			<p>Ultima schedina giocata: <a href="<%=request.getContextPath()%>/app/bet"><%=lastPlayedGiornata%> giornata </a></p>
 			<p>Nuova schedina da giocare: <a href="<%=request.getContextPath()%>/app/bet"><%=toPlayGiornata%> giornata </a><b id="mytimer"></b></p>
 		</div>
 

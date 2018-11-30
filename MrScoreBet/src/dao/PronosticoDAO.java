@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import model.*;
 
@@ -17,10 +18,12 @@ public class PronosticoDAO {
 		int generated_ID = -1;
 		
 		try {
-			s = conn.prepareStatement("INSERT INTO PRONOSTICI VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			s = conn.prepareStatement("INSERT INTO PRONOSTICI (schedina_ID,punti_calcolati,punti_pronostici," + 
+					"pron_match1,pron_match2,pron_match3,pron_match4,pron_match5,pron_match6,pron_match7," + 
+					"pron_match8,pron_match9,pron_match10) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 			s.setInt(1, schedina.getID());
 			s.setBoolean(2, false);
-			s.setInt(3, 0);
+			s.setNull(3, java.sql.Types.INTEGER);
 			
 			for(int i=0; i<10; i++)
 				s.setString(i+4, p.getGameList().get(i).getPronostico());
@@ -53,7 +56,8 @@ public class PronosticoDAO {
 			ResultSet rs = s.executeQuery();
 				
 			while (rs.next()) {
-				bet = SchedinaDAO.read(rs.getInt("schedina_ID"));				
+				bet = SchedinaDAO.read(rs.getInt("schedina_ID"));
+				bet.setID(ID);
 				if (rs.getBoolean("punti_calcolati")) bet.setPunti(rs.getInt("punti_pronostici"));
 				
 				for(int i=1; i<11; i++)
@@ -79,7 +83,8 @@ public class PronosticoDAO {
 			
 		try {
 			s = conn.prepareStatement("UPDATE PRONOSTICI SET punti_calcolati=1, punti_pronostici=? WHERE ID=?");			
-			s.setInt(1, b.getPunti());			
+			s.setInt(1, b.getPunti());
+			s.setInt(2, b.getID());
 			s.executeUpdate();
 			
 		} catch (SQLException e) {
@@ -99,30 +104,38 @@ public class PronosticoDAO {
 			s.setInt(1, b.getID());			
 			ResultSet rs = s.executeQuery();
 			
+			ArrayList<Bet> pronList = new ArrayList<Bet>();
 			while (rs.next()) {
-				Bet pron = PronosticoDAO.read(rs.getInt("ID"));
-				
-				// Calcola il numero di pronostici corretti
+				pronList.add(PronosticoDAO.read(rs.getInt("ID")));
+			}			
+			s.close();
+			
+			for(Bet pron:pronList) {
 				int pron_corretti = 0;				
+				
 				for(int i=0; i<10; i++)
 					if (pron.getGameList().get(i).getPronostico().equals(b.getGameList().get(i).getRisultato()))
 						pron_corretti++;
 				
-				// Assegna 10 punti per ogni pronostico corretto, ed ulteriori 100 se sono tutti corretti
-				pron.setPunti(pron_corretti*10 + ((pron_corretti==10)?100:0) );				
+				// Assegna 10 punti per ogni risultato correttamente pronosticato, ed ulteriori 100 se sono tutti corretti
+				pron.setPunti(pron_corretti*10 + ((pron_corretti==10)?100:0) );
 				PronosticoDAO.update(pron);
 				
 				// Aggiorna il punteggio totale dell'utente
-				s2 = conn.prepareStatement("SELECT * FROM UTENTI WHERE lastPlayedBet=?");
-				s2.setInt(1, pron.getID());				
-				ResultSet rs2 = s2.executeQuery();
-				while (rs2.next()) {
-					User u = UserDAO.read(rs.getString("FB_user_ID"));
-					u.setPuntiTot(u.getPuntiTot()+pron.getPunti());
-					UserDAO.update(u);
-				}
+				s = conn.prepareStatement("SELECT * FROM UTENTI WHERE lastPlayedBet=?");
+				s.setInt(1, pron.getID());				
+				rs = s.executeQuery();
 				
+				User u = null;
+				if (rs.next()) {
+					u = UserDAO.read(rs.getString("FB_user_ID"));
+					u.setPuntiTot(u.getPuntiTot()+pron.getPunti());
+				}				
+				s.close();	
+				
+				UserDAO.update(u);				
 			}
+			
 			
 		} catch (SQLException|UserNotFoundException e) {
 			System.out.println(e.getMessage());

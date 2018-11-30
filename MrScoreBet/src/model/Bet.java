@@ -4,23 +4,23 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Bet {
-	public int ID;
+	public Integer ID;
 	private int numGiornata;
 	private LocalDateTime orarioScadenza;
 	private ArrayList<Game> gameList;
 	private Integer punti;	// null se non sono ancora stati pubblicati i risultati
 	
-	public Bet(int iD, int numGiornata, LocalDateTime orarioScadenza, ArrayList<Game> gameList, Integer punti) {
+	public Bet(Integer ID, int numGiornata, LocalDateTime orarioScadenza, ArrayList<Game> gameList, Integer punti) {
 		super();
-		ID = iD;
+		this.ID = ID;
 		this.numGiornata = numGiornata;
 		this.orarioScadenza = orarioScadenza;
 		this.gameList = gameList;
 		this.punti = punti;
 	}	
 	
-	public int getID() {return ID;}
-	public void setID(int ID) {this.ID = ID;}
+	public Integer getID() {return ID;}
+	public void setID(Integer ID) {this.ID = ID;}
 	public int getNumGiornata() {return numGiornata;}
 	public void setNumGiornata(int numGiornata) {this.numGiornata = numGiornata;}
 	public ArrayList<Game> getGameList() {return gameList;}
