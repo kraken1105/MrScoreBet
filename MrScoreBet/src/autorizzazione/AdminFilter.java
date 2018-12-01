@@ -61,7 +61,7 @@ public class AdminFilter implements Filter {
        
         HttpSession session = req.getSession();
         if(session.getAttribute("utente")!=null){
-	        String PATH_POLICY = "c:\\policy\\";//path della cartella contenente le policy
+	        String PATH_POLICY = "c:\\utility\\policy\\";//path della cartella contenente le policy
 	        cercaPolicyFile(new File(PATH_POLICY));
 	        
 	        for(int i=0;i<listaFile.length;i++)

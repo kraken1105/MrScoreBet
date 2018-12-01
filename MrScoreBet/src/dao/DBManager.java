@@ -15,7 +15,7 @@ public class DBManager {
 	}
 	
 	public Connection getConnection() throws SQLException {
-		String url = "jdbc:sqlite:C:/policy/MrScoreBet.db";        
+		String url = "jdbc:sqlite:C:/utility/db/MrScoreBet.db";        
 		connection = DriverManager.getConnection(url);		
 		return connection;
 	}
