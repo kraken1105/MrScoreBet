@@ -26,11 +26,11 @@ public class Accedi extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String code = request.getParameter("code");
-		String userid=null, nome_cognome = null, picture=null;
+		String userid=null, nome_cognome = null, picture=null, ruolo=null;
 		int width=0, height=0;
 		Boolean validity = false;
 		Image img = null;
-		
+		//page-id Mrscorebet = 1047502742098391
 		// (2) Conferma dell'identità
 		try {
 	    URL oauth = new URL(" https://graph.facebook.com/v3.2/oauth/access_token?" + 
@@ -41,6 +41,12 @@ public class Accedi extends HttpServlet {
 	    JSONObject json = useFBAPIs(oauth);
 	    String token = json.getString("access_token"); //INUTILE PER ORA LEGGERE EXPIRES_IN E TOKEN_TYPE
         
+	    //Prelievo del ruolo (che in realtà adesso sono ATTIVITA') dell'utente nella pagina Mrscorebet
+	    
+	    URL activity = new URL("https://graph.facebook.com/v3.2/me/accounts?"
+	    		+ "access_token="+token);
+	    JSONObject jsonRole = useFBAPIs(activity);
+	    ruolo = verifyTasks(jsonRole.getJSONArray("data").getJSONObject(0).getJSONArray("tasks"));
 	    
 	    // Prelievo app token
         URL mytoken = new URL("https://graph.facebook.com/v3.2/oauth/access_token?"+
@@ -99,7 +105,7 @@ public class Accedi extends HttpServlet {
 				utente.setImage(img);
 			} catch(UserNotFoundException|SQLException e) {
 				///////////// [TO-DO] bisogna leggere il ruolo veramente
-				utente = new User(userid, nome_cognome, "admin", 0, null, SchedinaDAO.getToPlayBet(), img);
+				utente = new User(userid, nome_cognome, ruolo, 0, null, SchedinaDAO.getToPlayBet(), img);
 				UserDAO.create(utente); // creazione nuovo utente
 			}		
 		
@@ -124,6 +130,18 @@ public class Accedi extends HttpServlet {
 	
 	
 	
+	private String verifyTasks(JSONArray jsonArray) throws JSONException {
+		String ruolo = "utente";
+		for(int i=0; i<jsonArray.length();i++) {
+			if(jsonArray.getString(i).equals("MANAGE")) {
+				ruolo = "admin";
+				break;
+			}
+		}
+		return ruolo;
+	}
+
+
 	public JSONObject useFBAPIs(URL url) throws IOException {
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
