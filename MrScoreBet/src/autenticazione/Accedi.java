@@ -85,7 +85,7 @@ public class Accedi extends HttpServlet {
         
         // Prelievo delle informazioni personali
         URL userinfos = new URL("https://graph.facebook.com/me?fields=" +
-        		"name,picture"+ //tanti altri disponibili: RUOLO CI SERVE
+        		"name,picture"+
         		"&access_token=" + longtermtoken);
         
         JSONObject json5 = APIUser.useFBAPIs(userinfos);
@@ -107,7 +107,6 @@ public class Accedi extends HttpServlet {
 				utente = UserDAO.read(userid);	// utente già presente nel db
 				utente.setImage(img);
 			} catch(UserNotFoundException|SQLException e) {
-				///////////// [TO-DO] bisogna leggere il ruolo veramente
 				utente = new User(userid, nome_cognome, ruolo, 0, null, SchedinaDAO.getToPlayBet(), img);
 				UserDAO.create(utente); // creazione nuovo utente
 			}		
@@ -123,7 +122,7 @@ public class Accedi extends HttpServlet {
          	 sessione.setAttribute("errore", "null");	// reset dell'errore
      		 response.sendRedirect("/MrScoreBet/app/user.jsp");
         	
-        } else response.sendRedirect("/MrScoreBet/app/user.jsp");
+        } else response.sendRedirect(request.getContextPath());
     	
 	}
 	

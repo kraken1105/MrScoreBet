@@ -24,8 +24,6 @@
 </head>
 <body>
 
-	<!-- TO-DO: far comparire il tasto logout solo se l'utente è loggato -->
-
 	<!--border: 1px solid red-->
 	<header class="header clearfix">
 		<ul class="header__left">
@@ -78,53 +76,6 @@
 				<p>Vinci come un vero campione e ritira la tua vincita in relazione ai punti accumulati con tutti i tuoi pronostici esatti.</p>
 			</div>
 		</div>
-	</section>
-
-
-	<section class="banner clearfix">
-		<div class="banner__image"></div>
-		<div class="banner__copy">
-			<div class="banner__copy__text">
-				<h3>Banner Title</h3>
-				<h4>Banner Subtitle</h4>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas autem quam, explicabo pariatur sit nisi, adipisci saepe.</p>
-			</div>
-		</div>
-	</section>
-
-	<section class="cards clearfix">
-		<div class="card">
-			<img class="card__image"src="https://source.unsplash.com/category/nature/400x260" alt="Nature">
-			<div class="card__copy">
-				<h3>Title Card</h3>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis sequi incidunt optio, asperiores dolorum ratione excepturi. </p>
-			</div>
-		</div>
-		<div class="card">
-			<img class="card__image"src="https://source.unsplash.com/category/food/400x260" alt="Nature">
-			<div class="card__copy">
-				<h3>Title Card</h3>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis sequi incidunt optio, asperiores dolorum ratione excepturi. </p>
-			</div>
-		</div>
-		<div class="card">
-			<img class="card__image"src="https://source.unsplash.com/category/people/400x260" alt="Nature">
-			<div class="card__copy">
-				<h3>Title Card</h3>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis sequi incidunt optio, asperiores dolorum ratione excepturi. </p>
-			</div>
-		</div>
-	</section>
-
-	<section class="banner clearfix">
-		<div class="banner__copy">
-			<div class="banner__copy__text">
-				<h3>Banner Title</h3>
-				<h4>Banner Subtitle</h4>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas autem quam, explicabo pariatur sit nisi, adipisci saepe.</p>
-			</div>
-		</div>
-		<div class="banner__image"></div>
 	</section>
 
 

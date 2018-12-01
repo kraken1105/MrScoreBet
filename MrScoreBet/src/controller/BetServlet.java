@@ -23,7 +23,6 @@ public class BetServlet extends HttpServlet {
 
     //** Analizza la request per capire dove reindirizzare l'utente **//
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		HttpSession session = request.getSession();
 		User utente = (User) session.getAttribute("utente");
 		
@@ -49,22 +48,18 @@ public class BetServlet extends HttpServlet {
 		} else {
 			session.setAttribute("errore", "Si è verificato un errore!");
 			response.sendRedirect(request.getContextPath()+"/app/user.jsp");
-		}	
-		
+		}		
 	}
 
 	
 	//** Consente di inserire nel sistema il pronostico dell'utente **//
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		HttpSession session = request.getSession();
 		User utente = (User) session.getAttribute("utente");
 		Bet pron = utente.getToPlayBet();
 		
-		for(int i=1; i<11; i++) {
+		for(int i=1; i<11; i++) 
 			pron.getGameList().get(i-1).setPronostico(request.getParameter("match"+i));
-			System.out.println(pron.getGameList().get(i-1).getPronostico());
-		}
 
 		// Propago le modifiche nel database
 		try {

@@ -10,8 +10,6 @@ public class PronosticoDAO {
 	// 1) Create
 	//	  Nota: restituisce l'ID generato dal DB, il chiamante lo deve assegnare alla schedina.
 	//			Questo metodo viene invocato unicamente quando un utente gioca una nuova schedina.			
-	
-	// bisogna scambiare esternamente i riferimenti di lastbet e toplaybet ad user
 	public static int create(Bet p, Bet schedina) throws SQLException {
 		Connection conn = DBManager.getInstance().getConnection();
 		PreparedStatement s = null;
