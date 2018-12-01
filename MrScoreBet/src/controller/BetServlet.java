@@ -27,28 +27,24 @@ public class BetServlet extends HttpServlet {
 		User utente = (User) session.getAttribute("utente");
 		
 		String toPage = request.getParameter("to");
+		
 		if(toPage.equals("myLastBet")) {
-			
-			if(utente.getLastPlayedBet()==null) {
-				session.setAttribute("errore", "Non hai ancora giocato alcuna schedina!");
-				response.sendRedirect(request.getContextPath()+"/app/user.jsp");
+				if(utente.getLastPlayedBet()==null) {
+					session.setAttribute("errore", "Non hai ancora giocato alcuna schedina!");
+					response.sendRedirect(request.getContextPath()+"/app/user.jsp");
+				}
+				else response.sendRedirect(request.getContextPath()+"/app/bets/myLastBet.jsp");
+				
+			} else if(toPage.equals("placeMyBet")) {
+						if(utente.getToPlayBet()==null) {
+							session.setAttribute("errore", "Non è presente alcuna schedina da giocare!");
+							response.sendRedirect(request.getContextPath()+"/app/user.jsp");
+				} else response.sendRedirect(request.getContextPath()+"/app/bets/placeMyBet.jsp");
+				
 			} else {
-				response.sendRedirect("/MrScoreBet/app/myLastBet.jsp");
-			}
-			
-		} else if(toPage.equals("placeMyBet")) {
-			
-			if(utente.getToPlayBet()==null) {
-				session.setAttribute("errore", "Non è presente alcuna schedina da giocare!");
+				session.setAttribute("errore", "Si è verificato un errore!");
 				response.sendRedirect(request.getContextPath()+"/app/user.jsp");
-			} else {
-				response.sendRedirect("/MrScoreBet/app/placeMyBet.jsp");
-			}
-			
-		} else {
-			session.setAttribute("errore", "Si è verificato un errore!");
-			response.sendRedirect(request.getContextPath()+"/app/user.jsp");
-		}		
+			}	
 	}
 
 	
