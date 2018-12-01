@@ -1,8 +1,7 @@
 package autorizzazione;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.net.URL;
 
 
 import javax.servlet.Filter;
@@ -13,16 +12,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.*;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import com.sun.xacml.PDP;
-import com.sun.xacml.PDPConfig;
-import com.sun.xacml.ctx.RequestCtx;
-import com.sun.xacml.ctx.ResponseCtx;
-import com.sun.xacml.ctx.Result;
-import com.sun.xacml.finder.AttributeFinder;
-import com.sun.xacml.finder.PolicyFinder;
-import com.sun.xacml.finder.impl.CurrentEnvModule;
-import com.sun.xacml.finder.impl.FilePolicyModule;
+import FBInterlocutor.APIUser;
+import autenticazione.Accedi;
 
 
 /**
@@ -56,9 +50,24 @@ public class AuthenticationRequiredFilter implements Filter {
 		HttpSession session = req.getSession();
         if(session.getAttribute("utente")==null)
         	res.sendRedirect(req.getContextPath()+"/index.jsp");
-        else       	
-        	chain.doFilter(request, response);
+		else
+			try {
+				if(!isvalidToken(session.getAttribute("token"))) {
+					session.setAttribute("token", null);
+					res.sendRedirect(req.getContextPath()+"/Logout");
+				}
+				else       	
+					chain.doFilter(request, response);
+			} catch (JSONException e) {e.printStackTrace();}
 	        
+	}
+
+	private boolean isvalidToken(Object attribute) throws JSONException, IOException {
+		URL oinspect = new URL("https://graph.facebook.com/debug_token?" + 
+        		"input_token="+ attribute.toString() + 
+        		"&access_token="+Accedi.getApptoken());
+        JSONObject json = APIUser.useFBAPIs(oinspect);
+        return json.getJSONObject("data").getBoolean("is_valid");
 	}
 
 	@Override

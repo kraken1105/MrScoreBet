@@ -11,22 +11,25 @@ import javax.servlet.http.*;
 
 import org.json.*;
 
+import FBInterlocutor.APIUser;
 import dao.*;
 import model.*;
 
 @WebServlet(urlPatterns={"/accedi"})
 public class Accedi extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static String apptoken = null;
        
     public Accedi() {    	
         super();
     }
 	
-
+    public static String getApptoken() {return apptoken;}
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String code = request.getParameter("code");
-		String userid=null, nome_cognome = null, picture=null, ruolo=null;
+		String userid=null, nome_cognome = null, picture=null, ruolo=null, token = null;
 		int width=0, height=0;
 		Boolean validity = false;
 		Image img = null;
@@ -38,14 +41,14 @@ public class Accedi extends HttpServlet {
 	    		"&redirect_uri=https://localhost:8443"+request.getContextPath()+"/accedi"+ 
 	    		"&client_secret=d86e6c7a71084976e0d1747467dbd580" +
 	    		"&code="+code);
-	    JSONObject json = useFBAPIs(oauth);
-	    String token = json.getString("access_token"); //INUTILE PER ORA LEGGERE EXPIRES_IN E TOKEN_TYPE
+	    JSONObject json = APIUser.useFBAPIs(oauth);
+	    token = json.getString("access_token"); //INUTILE PER ORA LEGGERE EXPIRES_IN E TOKEN_TYPE
         
 	    //Prelievo del ruolo (che in realtà adesso sono ATTIVITA') dell'utente nella pagina Mrscorebet
 	    
 	    URL activity = new URL("https://graph.facebook.com/v3.2/me/accounts?"
 	    		+ "access_token="+token);
-	    JSONObject jsonRole = useFBAPIs(activity);
+	    JSONObject jsonRole = APIUser.useFBAPIs(activity);
 	    ruolo = verifyTasks(jsonRole.getJSONArray("data").getJSONObject(0).getJSONArray("tasks"));
 	    
 	    // Prelievo app token
@@ -55,8 +58,8 @@ public class Accedi extends HttpServlet {
 	    		"&client_secret=d86e6c7a71084976e0d1747467dbd580" +
 	    		"&grant_type=client_credentials");
         
-        JSONObject json2 = useFBAPIs(mytoken);
-        String apptoken = json2.getString("access_token");
+        JSONObject json2 = APIUser.useFBAPIs(mytoken);
+        apptoken = json2.getString("access_token");
        
         
         // (3) Ispezione dell'access token
@@ -64,7 +67,7 @@ public class Accedi extends HttpServlet {
         		"input_token="+ token + 
         		"&access_token="+apptoken);
         
-        JSONObject json3 = useFBAPIs(oinspect);
+        JSONObject json3 = APIUser.useFBAPIs(oinspect);
         validity = json3.getJSONObject("data").getBoolean("is_valid");
 		userid = json3.getJSONObject("data").getString("user_id");
 		
@@ -76,7 +79,7 @@ public class Accedi extends HttpServlet {
         			 "&client_secret=d86e6c7a71084976e0d1747467dbd580" + 
         			 "&fb_exchange_token="+token);
         
-        JSONObject json4 = useFBAPIs(extend);
+        JSONObject json4 = APIUser.useFBAPIs(extend);
         String longtermtoken = json4.getString("access_token");
         
         
@@ -85,7 +88,7 @@ public class Accedi extends HttpServlet {
         		"name,picture"+ //tanti altri disponibili: RUOLO CI SERVE
         		"&access_token=" + longtermtoken);
         
-        JSONObject json5 = useFBAPIs(userinfos);
+        JSONObject json5 = APIUser.useFBAPIs(userinfos);
         nome_cognome = json5.getString("name");
         picture = json5.getJSONObject("picture").getJSONObject("data").getString("url");
         width = json5.getJSONObject("picture").getJSONObject("data").getInt("width");
@@ -115,15 +118,12 @@ public class Accedi extends HttpServlet {
 		// (6) Reindirizzamento
         if(validity) {
         	 HttpSession sessione = request.getSession();
-         	 sessione.setAttribute("utente", utente );         	 
+         	 sessione.setAttribute("utente", utente );
+         	 sessione.setAttribute("token", token);
          	 sessione.setAttribute("errore", "null");	// reset dell'errore
      		 response.sendRedirect("/MrScoreBet/app/user.jsp");
         	
-        } else {
-        	
-        	// [TO-DO] Dobbiamo gestire eventuali token scaduti reindirizzando a una pagina di errore/login
-        	
-        }
+        } else response.sendRedirect("/MrScoreBet/app/user.jsp");
     	
 	}
 	
@@ -139,36 +139,6 @@ public class Accedi extends HttpServlet {
 			}
 		}
 		return ruolo;
-	}
-
-
-	public JSONObject useFBAPIs(URL url) throws IOException {
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        
-        BufferedReader in;
-        if (connection.getResponseCode() < HttpURLConnection.HTTP_BAD_REQUEST) {
-        	in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        	System.out.println(connection.getResponseCode());
-        } else {
-            in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-        	System.out.println(connection.getResponseCode());
-        	//bisognerebbe gestire le eccezioni come questa
-        }
-        
-        StringBuilder sb = new StringBuilder();
-        String line=null;
-        while ((line = in.readLine()) != null) {
-            sb.append(line);
-            System.out.println(line);
-        }
-        in.close();
-        
-        JSONObject json=null;
-        try {
-			json = new JSONObject(sb.toString());
-		} catch (JSONException e) {e.printStackTrace();}
-        return json;
 	}
 
 }

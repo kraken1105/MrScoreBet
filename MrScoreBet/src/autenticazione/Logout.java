@@ -18,7 +18,8 @@ public class Logout extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		session.removeAttribute("utente");		
+		session.removeAttribute("utente");	
+		session.removeAttribute("token");
 		session.setAttribute("errore", "Logout effettuato!");
 		response.sendRedirect(request.getContextPath());
 	}
