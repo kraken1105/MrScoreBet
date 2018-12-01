@@ -1,6 +1,8 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+
 import model.*;
 
 public class UserDAO {
@@ -105,19 +107,21 @@ public class UserDAO {
 		}
 	}
 	
-	// Aggiorna il toPlayBet a tutti gli utenti che in questo campo hanno null
+	// Aggiorna il toPlayBet a tutti gli utenti
 	public static void setToPlayBet(Bet b) throws SQLException {
 		Connection conn = DBManager.getInstance().getConnection();
 		PreparedStatement s = null;
 		
 		try { 
-			s = conn.prepareStatement("SELECT * FROM UTENTI WHERE toPlayBet=? OR toPlayBet=?");
-			s.setNull(1, java.sql.Types.INTEGER);
-			s.setInt(2, b.getNumGiornata()-1);
+			s = conn.prepareStatement("SELECT * FROM UTENTI");
 			ResultSet rs = s.executeQuery();
-				
-			while (rs.next()) {
-				User u = UserDAO.read(rs.getString("FB_user_ID"));
+			
+			ArrayList<String> userIDs = new ArrayList<String>();
+			while (rs.next()) userIDs.add(rs.getString("FB_user_ID"));
+			s.close();
+			
+			for(String userID:userIDs) {
+				User u = UserDAO.read(userID);
 				u.setToPlayBet(b);
 				UserDAO.update(u);
 			}

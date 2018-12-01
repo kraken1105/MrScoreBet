@@ -34,11 +34,6 @@ public class SchedinaDAO {
 			
 			s.executeUpdate();
 			
-			// Imposta b come toPlayBet per tutti gli utenti che hanno il toPlayBet a null
-			// (ossia che si sono appena registrati o avevano già giocato l'ultima schedina disponibile),
-			// e per tutti gli utenti che non hanno giocato l'ultima schedina (oramai è tardi)
-			UserDAO.setToPlayBet(b);
-			
 			ResultSet rs = s.getGeneratedKeys();
 		    if(rs.next()) {
 		    	generated_ID = rs.getInt(1);

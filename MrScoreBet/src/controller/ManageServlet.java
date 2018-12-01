@@ -2,6 +2,9 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -60,7 +63,6 @@ public class ManageServlet extends HttpServlet {
     //** Consente di inserire nel sistema sia una nuova schedina che i risultati di una già inserita (in base a un parametro) **//
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		//User utente = (User) session.getAttribute("utente");
 		
 		if(request.getParameter("post_type").equals("insertScore")) {			
 			Bet b = (Bet) session.getAttribute("toUpdateScore");
@@ -71,14 +73,29 @@ public class ManageServlet extends HttpServlet {
 			
 			// Propago le modifiche nel database
 			try {
-				SchedinaDAO.update(b);	
-			} catch (SQLException e) {e.printStackTrace();}
-			
-			response.sendRedirect(request.getContextPath()+"/app/user.jsp");			
+				SchedinaDAO.update(b);				
+			} catch (SQLException e) {e.printStackTrace();}			
+						
+						
 			
 		} else if(request.getParameter("post_type").equals("insertBet")) {
-			;
-		
+			
+			LocalDateTime orarioScadenza = LocalDateTime.parse(request.getParameter("dataScadenza")
+					+"T"+request.getParameter("oraScadenza"), DateTimeFormatter.ISO_DATE_TIME);
+			
+			ArrayList<Game> gameList = new ArrayList<Game>();
+			for(int i=1; i<11; i++)
+				gameList.add(new Game(request.getParameter("match"+i), null, null));
+			
+			Bet newbet = new Bet(null, Integer.parseInt(request.getParameter("numGiornata")), orarioScadenza, gameList, null);
+			
+			// Propago le modifiche nel database
+			try {
+				newbet.setID( SchedinaDAO.create(newbet) );
+				UserDAO.setToPlayBet(newbet);
+			} catch (SQLException e) {e.printStackTrace();}
+			
+			response.sendRedirect(request.getContextPath()+"/app/user.jsp");		
 		
 		} else {
 			if(session.getAttribute("toUpdateScore") != null) session.removeAttribute("toUpdateScore");

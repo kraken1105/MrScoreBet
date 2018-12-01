@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 
+<%@page import="dao.*"%>
 <%@page import="model.*"%>
 <%@page import="java.time.LocalDateTime"%>
 <%
-	User utente = (User) session.getAttribute("utente");
+	User utente = (User) session.getAttribute("utente");	
+	Image img = utente.getImage();
+	utente = UserDAO.read(utente.getUserID()); // aggiorna i dati dell'utente in sessione
+	utente.setImage(img);
+	session.setAttribute("utente", utente);
 	
 	Bet lastPlayedBet = utente.getLastPlayedBet();
 	String lastPlayedGiornata = new String("-");
@@ -28,6 +33,12 @@
 		out.print("<script> alert(\""+errore+"\"); </script> ");
 		session.setAttribute("errore","null");	// reset dell'errore
 	}
+	
+	// Per admin
+	String toInsertScoreGiornata = new String("-");	
+	Bet toInsertScoreBet = SchedinaDAO.getToPlayBet();	
+	if (toInsertScoreBet != null)
+		toInsertScoreGiornata = String.valueOf(toInsertScoreBet.getNumGiornata());	
 %>
 
 <html lang="en">
@@ -95,8 +106,8 @@
 		<div class="panel__copy2" <% if(!utente.getRuolo().equals("admin")) out.print("style=\"display: none\"");%> > 
 			<h2 align="center">Area admin</h2>
 
-			<p>Inserisci i risultati della <a href="<%=request.getContextPath()%>/admin/insertScore.jsp">1 giornata</a></p>
-			<p>Inserisci le partite della <a href="<%=request.getContextPath()%>/admin/insertBet.jsp">2 giornata</a></p>
+			<p>Inserisci i risultati della <a href="<%=request.getContextPath()%>/admin/manage?to=insertScore"><%=toInsertScoreGiornata%> giornata</a></p>
+			<p>Inserisci una <a href="<%=request.getContextPath()%>/admin/manage?to=insertBet">nuova schedina</a></p>
 		</div>
 
 	</article>

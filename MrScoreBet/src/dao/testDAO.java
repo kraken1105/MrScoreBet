@@ -2,7 +2,10 @@ package dao;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import com.sun.org.apache.xml.internal.resolver.readers.OASISXMLCatalogReader;
 
 import model.Bet;
 import model.Game;
@@ -12,6 +15,11 @@ public class testDAO {
 
 	public static void main(String[] args) throws SQLException, UserNotFoundException {
 		
+		
+		LocalDateTime orarioScadenza = LocalDateTime.of(2018, 12, 23, 12, 30);
+		System.out.println(orarioScadenza.toString());
+		
+		/*
 		//********* Inserimento pronostico ****************
 				ArrayList<Game> gameList = new ArrayList<Game>();
 				gameList.add(new Game("Juventus-Inter", null, "X"));
