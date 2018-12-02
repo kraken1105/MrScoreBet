@@ -13,7 +13,7 @@ import model.*;
 /**
  * Servlet implementation class BetServlet
  */
-@WebServlet("/app/bet")
+@WebServlet("/app/bets")
 public class BetServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
