@@ -75,7 +75,9 @@ public class UserDAO {
 			s = conn.prepareStatement("UPDATE UTENTI SET ruolo=?, puntiTot=?, lastPlayedBet = ?, toPlayBet=? WHERE FB_User_ID=?");
 			s.setString(1, u.getRuolo());
 			s.setInt(2, u.getPuntiTot());
-			s.setInt(3, u.getLastPlayedBet().getID());
+			
+			if(u.getLastPlayedBet() == null) s.setNull(3, java.sql.Types.INTEGER);
+			else s.setInt(3, u.getLastPlayedBet().getID());
 			
 			if(u.getToPlayBet() == null) s.setNull(4, java.sql.Types.INTEGER);
 			else s.setInt(4, u.getToPlayBet().getID());

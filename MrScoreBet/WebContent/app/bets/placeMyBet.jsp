@@ -41,7 +41,7 @@
 			alert("Inserisci un pronostico per <%=toPlayBet.getGameList().get(9).getSquadre()%>!"); return false; }
 		//INVIA IL MODULO
 		else {
-			document.getElementById("form1").action = "<%=request.getContextPath()%>/app/bet";
+			document.getElementById("form1").action = "<%=request.getContextPath()%>/app/bets";
 			document.getElementById("form1").submit();
 		}
 	}

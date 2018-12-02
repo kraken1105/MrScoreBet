@@ -95,7 +95,7 @@ public class ManageServlet extends HttpServlet {
 				UserDAO.setToPlayBet(newbet);
 			} catch (SQLException e) {e.printStackTrace();}
 			
-			response.sendRedirect(request.getContextPath()+"/app/user.jsp");		
+			response.sendRedirect(request.getContextPath()+"/app/user.jsp");	
 		
 		} else {
 			if(session.getAttribute("toUpdateScore") != null) session.removeAttribute("toUpdateScore");
