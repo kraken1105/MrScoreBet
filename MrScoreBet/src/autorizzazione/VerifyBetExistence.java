@@ -47,7 +47,7 @@ public class VerifyBetExistence implements Filter {
 	{
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		
+
 		HttpSession session = req.getSession();
 		Enumeration<String> attributes = req.getParameterNames();
 		boolean fieldToPresent = checkField(attributes);

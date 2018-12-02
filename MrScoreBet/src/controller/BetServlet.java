@@ -39,7 +39,7 @@ public class BetServlet extends HttpServlet {
 						if(utente.getToPlayBet()==null) {
 							session.setAttribute("errore", "Non è presente alcuna schedina da giocare!");
 							response.sendRedirect(request.getContextPath()+"/app/user.jsp");
-				} else response.sendRedirect(request.getContextPath()+"/app/bets/placeMyBet.jsp");
+				} else {session.setAttribute("to", "OK"); response.sendRedirect(request.getContextPath()+"/app/bets/placeMyBet.jsp");}
 				
 			} else {
 				session.setAttribute("errore", "Si è verificato un errore!");
