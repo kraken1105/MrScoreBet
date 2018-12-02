@@ -72,7 +72,7 @@
 				
 				<p><b>Numero giornata:</b> <input type="text" id="numGiornata" name="numGiornata" value="" /></p>
 				<p><b>Scadenza</b> (inizio della prima partita di giornata):<br></p>
-				<p>Data: <input type="date" id="dataScadenza" placeholder="gg/mm/aaaa" name="dataScadenza" value="" /><br></p>
+				<p>Data: <input type="date" id="dataScadenza" placeholder="aaaa-mm-gg" name="dataScadenza" value="" /><br></p>
 				<p>Ora: <input type="time" id="oraScadenza" placeholder="--:--" name="oraScadenza" value="" /></p>
 				
 				<br><br>

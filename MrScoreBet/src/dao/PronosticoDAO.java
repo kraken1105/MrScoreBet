@@ -92,6 +92,25 @@ public class PronosticoDAO {
 		}
 	}
 	
+	
+	// 4) Delete
+		public static void delete(Bet b) throws SQLException{
+			Connection conn = DBManager.getInstance().getConnection();
+			PreparedStatement s = null;
+			
+			try {
+				s = conn.prepareStatement("DELETE FROM PRONOSTICI WHERE ID=?");
+				s.setInt(1, b.getID());
+				
+				s.executeUpdate();
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			} finally {
+				if (s != null) s.close();
+			}
+		}
+		
+	
 	// Calcola i punteggi di tutti i pronostici riferiti a una data schedina (e li somma a quelli dell'utente)
 	public static void calcolaPunti(Bet b) throws SQLException {
 		Connection conn = DBManager.getInstance().getConnection();

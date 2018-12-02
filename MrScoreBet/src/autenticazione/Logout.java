@@ -25,7 +25,12 @@ public class Logout extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// Richiesta POST inviata da FB quando un utente rimuove le autorizzazione o richiede la cancellazione dei dati all'app
+		// cfr. https://developers.facebook.com/docs/apps/delete-data/
+		
+		
+		
+		
 		doGet(request, response);
 	}
 

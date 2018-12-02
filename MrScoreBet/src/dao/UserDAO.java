@@ -92,11 +92,14 @@ public class UserDAO {
 	
 	// 4) Delete
 	public static void delete(User u) throws SQLException{
+		Bet b = u.getLastPlayedBet();
+		PronosticoDAO.delete(b);		
+		
 		Connection conn = DBManager.getInstance().getConnection();
 		PreparedStatement s = null;
 		
 		try { 
-			s = conn.prepareStatement("DELETE UTENTI WHERE FB_User_ID=?");
+			s = conn.prepareStatement("DELETE FROM UTENTI WHERE FB_User_ID=?");
 			s.setString(1, u.getUserID());
 			
 			s.executeUpdate();
