@@ -90,10 +90,10 @@ public class Logout extends HttpServlet {
 				try {
 				User u = UserDAO.read(user_id);
 				UserDAO.delete(u);
-				String[] answer =new String[2];
-				answer[0] = "https://localhost:8443/MrScoreBet/index.jsp";
-				answer[1] = "success_code";
-				toFB.print(new JSONObject(answer));
+				JSONObject json = new JSONObject();
+				json.put("url", "https://localhost:8443/MrScoreBet/index.jsp");
+				json.put("confirmation_code", "success_code");
+				toFB.print(json);
 				}catch(UserNotFoundException e) {toFB.print("No such user in this application");}
 				
 			}
