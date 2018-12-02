@@ -98,8 +98,8 @@
 			<h2 align="center">Schedine</h2>
 			<p>Punti totali: <b><%=""+utente.getPuntiTot() %> pts</b></p>
 			<!-- TO-DO: sistemare query string per indirizzamneto alla servlet -->
-			<p>Ultima schedina giocata: <a href="<%=request.getContextPath()%>/app/bet?to=myLastBet"><%=lastPlayedGiornata%> giornata </a></p>
-			<p>Nuova schedina da giocare: <a href="<%=request.getContextPath()%>/app/bet?to=placeMyBet"><%=toPlayGiornata%> giornata </a><b id="mytimer"></b></p>
+			<p>Ultima schedina giocata: <a href="<%=request.getContextPath()%>/app/bets?to=myLastBet"><%=lastPlayedGiornata%> giornata </a></p>
+			<p>Nuova schedina da giocare: <a href="<%=request.getContextPath()%>/app/bets?to=placeMyBet"><%=toPlayGiornata%> giornata </a><b id="mytimer"></b></p>
 		</div>
 
 		<!-- TO-DO: far comparire il pannello solo se è loggato un admin -->

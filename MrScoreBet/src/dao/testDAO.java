@@ -66,7 +66,6 @@ public class testDAO {
 		
 		
 		
-		
 		//********* Inserimento Schedina da parte di un admin ****************
 		ArrayList<Game> gameList = new ArrayList<Game>();
 		gameList.add(new Game("Juventus-Inter", null, null));
@@ -82,7 +81,6 @@ public class testDAO {
 		Bet bet = new Bet(null, 15, LocalDateTime.of(2018, 12, 7, 20, 30), gameList, null);
 		bet.setID(SchedinaDAO.create(bet));
 		System.out.println("toPlayBet_ID="+bet.getID());
-		
 		
 		//******** Login utente *************
 		User utente = null;
