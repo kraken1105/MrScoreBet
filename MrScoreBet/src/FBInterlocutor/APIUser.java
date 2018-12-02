@@ -10,9 +10,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class APIUser {
-	public static JSONObject useFBAPIs(URL url) throws IOException {
+	public static JSONObject useFBAPIs(URL url, String method) throws IOException {
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
+        connection.setRequestMethod(method);
         
         BufferedReader in;
         if (connection.getResponseCode() < HttpURLConnection.HTTP_BAD_REQUEST) {

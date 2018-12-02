@@ -41,14 +41,14 @@ public class Accedi extends HttpServlet {
 	    		"&redirect_uri=https://localhost:8443"+request.getContextPath()+"/accedi"+ 
 	    		"&client_secret=d86e6c7a71084976e0d1747467dbd580" +
 	    		"&code="+code);
-	    JSONObject json = APIUser.useFBAPIs(oauth);
+	    JSONObject json = APIUser.useFBAPIs(oauth, "GET");
 	    token = json.getString("access_token"); //INUTILE PER ORA LEGGERE EXPIRES_IN E TOKEN_TYPE
         
 	    //Prelievo del ruolo (che in realtà adesso sono ATTIVITA') dell'utente nella pagina Mrscorebet
 	    
 	    URL activity = new URL("https://graph.facebook.com/v3.2/me/accounts?"
 	    		+ "access_token="+token);
-	    JSONObject jsonRole = APIUser.useFBAPIs(activity);
+	    JSONObject jsonRole = APIUser.useFBAPIs(activity, "GET");
 	    ruolo = verifyTasks(jsonRole.getJSONArray("data").getJSONObject(0).getJSONArray("tasks"));
 	    
 	    // Prelievo app token
@@ -58,7 +58,7 @@ public class Accedi extends HttpServlet {
 	    		"&client_secret=d86e6c7a71084976e0d1747467dbd580" +
 	    		"&grant_type=client_credentials");
         
-        JSONObject json2 = APIUser.useFBAPIs(mytoken);
+        JSONObject json2 = APIUser.useFBAPIs(mytoken, "GET");
         apptoken = json2.getString("access_token");
        
         
@@ -67,7 +67,7 @@ public class Accedi extends HttpServlet {
         		"input_token="+ token + 
         		"&access_token="+apptoken);
         
-        JSONObject json3 = APIUser.useFBAPIs(oinspect);
+        JSONObject json3 = APIUser.useFBAPIs(oinspect, "GET");
         validity = json3.getJSONObject("data").getBoolean("is_valid");
 		userid = json3.getJSONObject("data").getString("user_id");
 		
@@ -79,7 +79,7 @@ public class Accedi extends HttpServlet {
         			 "&client_secret=d86e6c7a71084976e0d1747467dbd580" + 
         			 "&fb_exchange_token="+token);
         
-        JSONObject json4 = APIUser.useFBAPIs(extend);
+        JSONObject json4 = APIUser.useFBAPIs(extend, "GET");
         String longtermtoken = json4.getString("access_token");
         
         
@@ -88,7 +88,7 @@ public class Accedi extends HttpServlet {
         		"name,picture"+
         		"&access_token=" + longtermtoken);
         
-        JSONObject json5 = APIUser.useFBAPIs(userinfos);
+        JSONObject json5 = APIUser.useFBAPIs(userinfos, "GET");
         nome_cognome = json5.getString("name");
         picture = json5.getJSONObject("picture").getJSONObject("data").getString("url");
         width = json5.getJSONObject("picture").getJSONObject("data").getInt("width");

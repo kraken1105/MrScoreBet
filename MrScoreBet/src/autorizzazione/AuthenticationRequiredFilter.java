@@ -66,7 +66,7 @@ public class AuthenticationRequiredFilter implements Filter {
 		URL oinspect = new URL("https://graph.facebook.com/debug_token?" + 
         		"input_token="+ attribute.toString() + 
         		"&access_token="+Accedi.getApptoken());
-        JSONObject json = APIUser.useFBAPIs(oinspect);
+        JSONObject json = APIUser.useFBAPIs(oinspect, "GET");
         return json.getJSONObject("data").getBoolean("is_valid");
 	}
 

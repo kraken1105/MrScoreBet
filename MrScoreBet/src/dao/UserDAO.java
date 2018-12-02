@@ -93,7 +93,7 @@ public class UserDAO {
 	// 4) Delete
 	public static void delete(User u) throws SQLException{
 		Bet b = u.getLastPlayedBet();
-		PronosticoDAO.delete(b);		
+		if(b!=null) PronosticoDAO.delete(b);		
 		
 		Connection conn = DBManager.getInstance().getConnection();
 		PreparedStatement s = null;

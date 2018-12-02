@@ -65,7 +65,7 @@
 		</a>
 		<ul class="header__menu animate">
 			<li class="header__menu__item"><a href="<%=request.getContextPath()%>/app/user.jsp">Area Personale</a></li>
-			<li class="header__menu__item"><a href="<%=request.getContextPath()%>/Logout">Logout</a></li>
+			<li class="header__menu__item"><a href="<%=request.getContextPath()%>/Logout?delete=true">Logout</a></li>
 		</ul>
 	</header>
 
