@@ -10,6 +10,7 @@ general
 }
 
 .button{display: inline-block; background: #4267b2; color:#fff;padding: 15px 30px; border-radius:3px; text-decoration: none;}
+.button2{display: inline-block; background: #ea0000; color:#fff;padding: 8px 15px; border-radius:3px; text-decoration: none;}
 p{line-height: 22px}
 a{color:#ff8000}
 a:hover{color: #ffa64d;}

@@ -76,7 +76,7 @@ public class ManageServlet extends HttpServlet {
 				SchedinaDAO.update(b);				
 			} catch (SQLException e) {e.printStackTrace();}			
 						
-						
+			response.sendRedirect(request.getContextPath()+"/app/user.jsp");			
 			
 		} else if(request.getParameter("post_type").equals("insertBet")) {
 			

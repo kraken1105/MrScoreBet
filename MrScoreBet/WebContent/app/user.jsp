@@ -65,7 +65,7 @@
 		</a>
 		<ul class="header__menu animate">
 			<li class="header__menu__item"><a href="<%=request.getContextPath()%>/app/user.jsp">Area Personale</a></li>
-			<li class="header__menu__item"><a href="<%=request.getContextPath()%>/Logout?delete=true">Logout</a></li>
+			<li class="header__menu__item"><a href="<%=request.getContextPath()%>/Logout">Logout</a></li>
 		</ul>
 	</header>
 
@@ -93,13 +93,18 @@
 						<p>Facebook UserID: <br></br><b><%=""+utente.getUserID() %></b></p>
 					</div>
 				</div>
-			</div>	
+			</div>
 
 			<h2 align="center">Schedine</h2>
 			<p>Punti totali: <b><%=""+utente.getPuntiTot() %> pts</b></p>
 			<!-- TO-DO: sistemare query string per indirizzamneto alla servlet -->
 			<p>Ultima schedina giocata: <a href="<%=request.getContextPath()%>/app/bets?to=myLastBet"><%=lastPlayedGiornata%> giornata </a></p>
 			<p>Nuova schedina da giocare: <a href="<%=request.getContextPath()%>/app/bets?to=placeMyBet"><%=toPlayGiornata%> giornata </a><b id="mytimer"></b></p>
+			
+			<br><br>
+			<p><b>ATTENZIONE:</b> premendo sul seguente bottone cancellerai tutti i tuoi dati dall'applicazione e rimuoverai l'accesso tramite il tuo account Facebook.</p>
+			<p align="center"><a href="<%=request.getContextPath()%>/Logout?delete=true" class="button2">Chiudi il tuo account</a></p>
+		
 		</div>
 
 		<!-- TO-DO: far comparire il pannello solo se è loggato un admin -->
