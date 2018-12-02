@@ -98,6 +98,7 @@ public class Logout extends HttpServlet {
 				
 			}
 		} catch (JSONException|NoSuchAlgorithmException|SQLException e) {e.printStackTrace();}
+		toFB.close();
 		}
 		
 }
