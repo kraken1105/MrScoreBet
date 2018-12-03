@@ -32,17 +32,6 @@
     <filter-name>AdminFilter</filter-name>
     <url-pattern>/admin/*</url-pattern>
   </filter-mapping>
-  <!--  
-  <filter>
-    <display-name>VerifyBetExistence</display-name>
-    <filter-name>VerifyBetExistence</filter-name>
-    <filter-class>autorizzazione.VerifyBetExistence</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>VerifyBetExistence</filter-name>
-    <url-pattern>/app/bets/*</url-pattern>
-  </filter-mapping>
-  -->
   <filter>
     <display-name>AuthenticationRequiredFilter</display-name>
     <filter-name>AuthenticationRequiredFilter</filter-name>
