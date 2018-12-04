@@ -49,7 +49,9 @@ public class Accedi extends HttpServlet {
 	    URL activity = new URL("https://graph.facebook.com/v3.2/me/accounts?"
 	    		+ "access_token="+token);
 	    JSONObject jsonRole = APIUser.useFBAPIs(activity, "GET");
-	    ruolo = verifyTasks(jsonRole.getJSONArray("data").getJSONObject(0).getJSONArray("tasks"));
+	    JSONObject mypage = findMrScore(jsonRole.getJSONArray("data"));
+	    ruolo = verifyTasks(mypage.getJSONArray("tasks"));
+	    //ruolo = verifyTasks(jsonRole.getJSONArray("data").getJSONObject(0).getJSONArray("tasks"));
 	    
 	    // Prelievo app token
         URL mytoken = new URL("https://graph.facebook.com/v3.2/oauth/access_token?"+
@@ -129,6 +131,14 @@ public class Accedi extends HttpServlet {
 	
 	
 	
+	private JSONObject findMrScore(JSONArray jsonArray) throws JSONException {
+		int i;
+		for(i=0;i<jsonArray.length();i++) {
+			if(jsonArray.getJSONObject(i).getString("id").equals("1047502742098391")) break;
+		}
+		return jsonArray.getJSONObject(i);
+	}
+
 	private String verifyTasks(JSONArray jsonArray) throws JSONException {
 		String ruolo = "utente";
 		for(int i=0; i<jsonArray.length();i++) {
